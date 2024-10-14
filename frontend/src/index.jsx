@@ -7,7 +7,7 @@ import {
 
 import './scss/style.scss';
 
-import App from './App';
+import App from './pages/login.jsx';
 
 const router = createBrowserRouter([
   {
