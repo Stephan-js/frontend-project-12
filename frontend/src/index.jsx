@@ -5,7 +5,7 @@ import {
   RouterProvider,
 } from 'react-router-dom';
 
-import './scss/style.scss';
+import './scss/styleLogin.scss';
 
 import Login from './pages/login';
 
