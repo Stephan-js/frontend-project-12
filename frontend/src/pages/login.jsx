@@ -1,17 +1,16 @@
 import React from 'react';
-// eslint-disable-next-line no-unused-vars
 import { Formik } from 'formik';
 
 function Login() {
   return (
-    <div className="h-100">
+    <div className="h-100 d-flex flex-column">
       <nav className="navbar navbar-expand-lg navbar-light shadow-sm">
         <div className="container">
           <a className="navbar-brand" href="/">Chat App</a>
         </div>
       </nav>
       <div className="my-auto d-flex align-items-center justify-content-center h-100">
-        <div className="card shadow-sm">
+        <div className="card shadow-sm border rounded-4">
           <div className="card-body">
             <Formik
               initialValues={{ username: '', password: '' }}
@@ -19,21 +18,18 @@ function Login() {
                 const errors = {};
                 if (!values.username) {
                   errors.email = 'Required';
-                  console.log('req');
                 }
 
                 if (!values.password) {
                   errors.password = 'Required';
-                  console.log('req1');
                 }
 
-                console.log(values);
                 return errors;
               }}
-              onSubmit={(values, { setSubmitting }) => {
+              onSubmit={(values, actions) => {
                 setTimeout(() => {
                   alert(JSON.stringify(values, null, 2));
-                  setSubmitting(false);
+                  actions.setSubmitting(false);
                 }, 400);
               }}
             >

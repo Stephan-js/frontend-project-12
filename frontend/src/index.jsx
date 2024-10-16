@@ -12,11 +12,11 @@ import Login from './pages/login';
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Login />,
+    element: <meta httpEquiv="refresh" content="0; url=/login" />,
   },
   {
     path: '/login',
-    element: <p>It Works!</p>,
+    element: <Login />,
   },
 ]);
 
