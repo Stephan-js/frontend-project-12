@@ -8,12 +8,13 @@ import {
 import './scss/styleLogin.scss';
 
 import Login from './pages/login';
+import Page404 from './pages/page404';
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <h1>Developing!</h1>,
-    errorElement: <h1>Hi</h1>,
+    errorElement: <Page404 />,
   },
   {
     path: '/login',
