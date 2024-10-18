@@ -2,6 +2,8 @@
 import React from 'react';
 import { Formik } from 'formik';
 
+import image from '../img/login.jpg';
+
 function Login() {
   return (
     <div className="h-100 d-flex flex-column">
@@ -16,7 +18,7 @@ function Login() {
             <div className="card border rounded-5 border-bottom-0 shadow-sm my-4">
               <div className="row card-body p-5">
                 <div className="col-11 col-md-6 d-flex align-items-center justify-content-center">
-                  <img src="..." className="rounded" alt="123" height={200} width={200} />
+                  <img src={image} className="rounded" alt="123" height={200} width={200} />
                 </div>
                 <Formik
                   initialValues={{ username: '', password: '' }}
@@ -96,6 +98,7 @@ function Login() {
               <div className="card-footer p-4 border rounded-5 rounded-top-0 border-start-0 border-end-0">
                 <div className="text-center">
                   <span>Haven&apos;t account?</span>
+                  <a href="/register"> Register!</a>
                 </div>
               </div>
             </div>
