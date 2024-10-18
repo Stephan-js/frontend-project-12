@@ -12,10 +12,10 @@ function Login() {
       </nav>
       <div className="container-fluid h-100">
         <div className="row align-items-center justify-content-center h-100">
-          <div className="col-12 col-sm-10 col-md-8 col-xxl-6">
-            <div className="card shadow-sm">
+          <div className="col-11 col-sm-10 col-md-8 col-xl-7 col-xxl-6">
+            <div className="card border rounded-5 border-bottom-0 shadow-sm my-4">
               <div className="row card-body p-5">
-                <div className="col-12 col-md-6 d-flex align-items-center justify-content-center">
+                <div className="col-11 col-md-6 d-flex align-items-center justify-content-center">
                   <img src="..." className="rounded" alt="123" height={200} width={200} />
                 </div>
                 <Formik
@@ -92,6 +92,11 @@ function Login() {
                     </form>
                   )}
                 </Formik>
+              </div>
+              <div className="card-footer p-4 border rounded-5 rounded-top-0 border-start-0 border-end-0">
+                <div className="text-center">
+                  <span>Haven&apos;t account?</span>
+                </div>
               </div>
             </div>
           </div>
