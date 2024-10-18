@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import React from 'react';
 import { Formik } from 'formik';
 
@@ -9,84 +10,89 @@ function Login() {
           <a className="navbar-brand" href="/">Chat App</a>
         </div>
       </nav>
-      <div className="my-auto d-flex align-items-center justify-content-center h-100">
-        <div className="card shadow-sm border rounded-4">
-          <div className="card-body">
-            <Formik
-              initialValues={{ username: '', password: '' }}
-              validate={(values) => {
-                const errors = {};
-                if (!values.username) {
-                  errors.email = 'Required';
-                }
+      <div className="container-fluid h-100">
+        <div className="row align-items-center justify-content-center h-100">
+          <div className="col-12 col-md-8 col-xxl-6">
+            <div className="card shadow-sm">
+              <div className="row card-body p-5">
+                <div className="col-12 col-md-6 d-flex align-items-center justify-content-center">
+                  <img src="..." className="rounded" alt="123" height={200} width={200} />
+                </div>
+                <Formik
+                  initialValues={{ username: '', password: '' }}
+                  validate={(values) => {
+                    const errors = {};
+                    if (!values.username) {
+                      errors.email = 'Required';
+                    }
 
-                if (!values.password) {
-                  errors.password = 'Required';
-                }
+                    if (!values.password) {
+                      errors.password = 'Required';
+                    }
 
-                return errors;
-              }}
-              onSubmit={(values, actions) => {
-                setTimeout(() => {
-                  alert(JSON.stringify(values, null, 2));
-                  actions.setSubmitting(false);
-                }, 400);
-              }}
-            >
-              {({
-                values,
-                // eslint-disable-next-line no-unused-vars
-                errors,
-                handleChange,
-                handleBlur,
-                handleSubmit,
-                isSubmitting,
-              }) => (
-                <form onSubmit={handleSubmit}>
-                  <div className="mb-3 mt-2">
-                    <label htmlFor="usernameInput" className="form-label">
-                      Username
-                      <input
-                        name="username"
-                        id="usernameInput"
-                        className="form-control"
-                        aria-describedby="Username"
-                        type="text"
-                        value={values.username}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                      />
-                    </label>
-                  </div>
-                  <div className="mb-3">
-                    <label htmlFor="passwordInput" className="form-label">
-                      Password
-                      <input
-                        name="password"
-                        id="passwordInput"
-                        className="form-control"
-                        aria-describedby="Password"
-                        type="password"
-                        value={values.password}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                      />
-                    </label>
-                  </div>
-                  <button
-                    onSubmit={isSubmitting}
-                    type="submit"
-                    className="btn btn-primary mb-2"
-                  >
-                    Submit
-                  </button>
-                </form>
-              )}
-            </Formik>
-          </div>
-          <div className="card-footer">
-            <div className="text-center">
-              <p>123123</p>
+                    return errors;
+                  }}
+                  onSubmit={(values, actions) => {
+                    setTimeout(() => {
+                      alert(JSON.stringify(values, null, 2));
+                      actions.setSubmitting(false);
+                    }, 400);
+                  }}
+                >
+                  {({
+                    values,
+                    // eslint-disable-next-line no-unused-vars
+                    errors,
+                    handleChange,
+                    handleBlur,
+                    handleSubmit,
+                    isSubmitting,
+                  }) => (
+                    <form className="col-12 col-md-6 mt-3 mt-md-0" onSubmit={handleSubmit}>
+                      <h1 className="text-center mb-4">Login</h1>
+                      <div className="form-floating mb-3">
+                        <input
+                          name="username"
+                          id="usernameInput"
+                          className="form-control"
+                          aria-describedby="Username"
+                          placeholder="Username"
+                          type="text"
+                          value={values.username}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                        />
+                        <label htmlFor="usernameInput">
+                          Username
+                        </label>
+                      </div>
+                      <div className="form-floating mb-4">
+                        <input
+                          name="password"
+                          id="passwordInput"
+                          className="form-control"
+                          aria-describedby="Password"
+                          placeholder="Password"
+                          type="password"
+                          value={values.password}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                        />
+                        <label htmlFor="passwordInput">
+                          Password
+                        </label>
+                      </div>
+                      <button
+                        onSubmit={isSubmitting}
+                        type="submit"
+                        className="w-100 mb-3 btn btn-outline-primary"
+                      >
+                        Submit
+                      </button>
+                    </form>
+                  )}
+                </Formik>
+              </div>
             </div>
           </div>
         </div>
