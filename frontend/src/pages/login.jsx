@@ -12,7 +12,7 @@ function Login() {
       </nav>
       <div className="container-fluid h-100">
         <div className="row align-items-center justify-content-center h-100">
-          <div className="col-12 col-md-8 col-xxl-6">
+          <div className="col-12 col-sm-10 col-md-8 col-xxl-6">
             <div className="card shadow-sm">
               <div className="row card-body p-5">
                 <div className="col-12 col-md-6 d-flex align-items-center justify-content-center">
