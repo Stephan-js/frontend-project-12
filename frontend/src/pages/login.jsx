@@ -1,6 +1,8 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React from 'react';
+import classNames from 'classnames';
 import { Formik } from 'formik';
+import * as Yup from 'yup';
 
 import image from '../img/login.jpg';
 
@@ -22,28 +24,24 @@ function Login() {
                 </div>
                 <Formik
                   initialValues={{ username: '', password: '' }}
-                  validate={(values) => {
-                    const errors = {};
-                    if (!values.username) {
-                      errors.email = 'Required';
-                    }
-
-                    if (!values.password) {
-                      errors.password = 'Required';
-                    }
-
-                    return errors;
-                  }}
-                  onSubmit={(values, actions) => {
+                  validationSchema={Yup.object({
+                    username: Yup.string()
+                      .max(20, 'Must be 20 characters or less!')
+                      .matches(/^[a-zA-Z0-9-_ ]*$/, 'Please, enter valid characters.'),
+                    password: Yup.string()
+                      .max(20, 'Must be 20 characters or less!')
+                      .matches(/^[a-zA-Z0-9!?,._-]*$/, 'Please, enter valid characters.'),
+                  })}
+                  onSubmit={(values, { setSubmitting }) => {
                     setTimeout(() => {
                       alert(JSON.stringify(values, null, 2));
-                      actions.setSubmitting(false);
+                      setSubmitting(false);
                     }, 400);
                   }}
                 >
                   {({
                     values,
-                    // eslint-disable-next-line no-unused-vars
+                    touched,
                     errors,
                     handleChange,
                     handleBlur,
@@ -56,10 +54,11 @@ function Login() {
                         <input
                           name="username"
                           id="usernameInput"
-                          className="form-control"
+                          className={classNames('form-control', 'rounded-4', { 'is-invalid': errors.username && touched.username })}
                           aria-describedby="Username"
                           placeholder="Username"
                           type="text"
+                          required
                           value={values.username}
                           onChange={handleChange}
                           onBlur={handleBlur}
@@ -67,15 +66,19 @@ function Login() {
                         <label htmlFor="usernameInput">
                           Username
                         </label>
+                        {errors.username && touched.username ? (
+                          <div className="invalid-feedback">{errors.username}</div>
+                        ) : null}
                       </div>
                       <div className="form-floating mb-4">
                         <input
                           name="password"
                           id="passwordInput"
-                          className="form-control"
+                          className={classNames('form-control', 'rounded-4', { 'is-invalid': errors.password && touched.password })}
                           aria-describedby="Password"
                           placeholder="Password"
                           type="password"
+                          required
                           value={values.password}
                           onChange={handleChange}
                           onBlur={handleBlur}
@@ -83,11 +86,14 @@ function Login() {
                         <label htmlFor="passwordInput">
                           Password
                         </label>
+                        {errors.password && touched.password ? (
+                          <div className="invalid-feedback">{errors.password}</div>
+                        ) : null}
                       </div>
                       <button
                         onSubmit={isSubmitting}
                         type="submit"
-                        className="w-100 mb-3 btn btn-outline-primary"
+                        className="w-100 mb-3 btn btn-outline-dark rounded-5"
                       >
                         Submit
                       </button>
