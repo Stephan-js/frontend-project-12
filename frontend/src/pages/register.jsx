@@ -1,12 +1,10 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React from 'react';
-import classNames from 'classnames';
 import { Formik } from 'formik';
+import classNames from 'classnames';
 import * as Yup from 'yup';
 
-import image from '../img/login.jpg';
-
-function Login() {
+function Register() {
   return (
     <div className="h-100 d-flex flex-column">
       <nav className="navbar navbar-expand-lg navbar-light shadow-sm">
@@ -17,10 +15,10 @@ function Login() {
       <div className="container-fluid h-100">
         <div className="row align-items-center justify-content-center h-100">
           <div className="col-11 col-sm-10 col-md-8 col-xl-7 col-xxl-6">
-            <div className="card border rounded-5 border-bottom-0 shadow-sm my-4">
+            <div className="card border rounded-5 shadow-sm my-4">
               <div className="row card-body p-5">
                 <div className="col-12 col-md-6 d-flex align-items-center justify-content-center">
-                  <img src={image} className="rounded" alt="Login-Image" height={200} width={200} />
+                  <img src="..." className="rounded" alt="Register-Image" height={200} width={200} />
                 </div>
                 <Formik
                   initialValues={{ username: '', password: '' }}
@@ -67,7 +65,7 @@ function Login() {
                           Username
                         </label>
                         {errors.username && touched.username ? (
-                          <div className="ms-2 invalid-feedback">{errors.username}</div>
+                          <div className="invalid-feedback">{errors.username}</div>
                         ) : null}
                       </div>
                       <div className="form-floating mb-4">
@@ -87,7 +85,27 @@ function Login() {
                           Password
                         </label>
                         {errors.password && touched.password ? (
-                          <div className="ms-2 invalid-feedback">{errors.password}</div>
+                          <div className="invalid-feedback">{errors.password}</div>
+                        ) : null}
+                      </div>
+                      <div className="form-floating mb-4">
+                        <input
+                          name="password"
+                          id="passwordInput"
+                          className={classNames('form-control', 'rounded-4', { 'is-invalid': errors.password && touched.password })}
+                          aria-describedby="Password"
+                          placeholder="Password"
+                          type="password"
+                          required
+                          value={values.password}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                        />
+                        <label htmlFor="passwordInput">
+                          Password
+                        </label>
+                        {errors.password && touched.password ? (
+                          <div className="invalid-feedback">{errors.password}</div>
                         ) : null}
                       </div>
                       <button
@@ -101,12 +119,6 @@ function Login() {
                   )}
                 </Formik>
               </div>
-              <div className="card-footer p-4 border rounded-5 rounded-top-0 border-start-0 border-end-0">
-                <div className="text-center">
-                  <span>Haven&apos;t account? </span>
-                  <a href="/register">Register!</a>
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -115,4 +127,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Register;

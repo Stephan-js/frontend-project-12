@@ -9,6 +9,7 @@ import './scss/styleLogin.scss';
 
 import Login from './pages/login';
 import Page404 from './pages/page404';
+import Register from './pages/register';
 
 const router = createBrowserRouter([
   {
@@ -19,6 +20,10 @@ const router = createBrowserRouter([
   {
     path: '/login',
     element: <Login />,
+  },
+  {
+    path: '/register',
+    element: <Register />,
   },
 ]);
 
