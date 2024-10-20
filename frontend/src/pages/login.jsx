@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React from 'react';
+import axios from 'axios';
 import classNames from 'classnames';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
@@ -32,11 +33,19 @@ function Login() {
                       .max(20, 'Must be 20 characters or less!')
                       .matches(/^[a-zA-Z0-9!?,._-]*$/, 'Please, enter valid characters.'),
                   })}
-                  onSubmit={(values, { setSubmitting }) => {
-                    setTimeout(() => {
-                      alert(JSON.stringify(values, null, 2));
-                      setSubmitting(false);
-                    }, 400);
+                  onSubmit={(values, { resetForm, setErrors }) => {
+                    axios.post('/api/v1/login', { username: values.username, password: values.password })
+                      .then((data) => {
+                        localStorage.setItem('token', data.token);
+                        resetForm();
+                      })
+                      .catch((err) => {
+                        if (err.status === 401) {
+                          setErrors({ username: true, password: 'Wrong password or username.' });
+                        } else {
+                          setErrors({ username: true, password: 'Sorry, unknown error.' });
+                        }
+                      });
                   }}
                 >
                   {({

@@ -37,13 +37,16 @@ function Register() {
                   })}
                   onSubmit={(values, { setFieldError, resetForm }) => {
                     axios.post('/api/v1/signup', { username: values.username, password: values.password })
-                      .then((response) => {
-                        console.log(response.data);
+                      .then((data) => {
+                        localStorage.setItem('token', data.token);
                         resetForm();
                       })
                       .catch((err) => {
-                        console.log(err.status);
-                        setFieldError('username', 'This user already exist.');
+                        if (err.status === 409) {
+                          document.location.href = '/login';
+                        } else {
+                          setFieldError({ username: true, password2: true, password: 'Sorry, unknown error.' });
+                        }
                       });
                   }}
                 >
