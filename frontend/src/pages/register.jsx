@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React from 'react';
+import axios from 'axios';
 import { Formik } from 'formik';
 import classNames from 'classnames';
 import * as Yup from 'yup';
@@ -21,20 +22,29 @@ function Register() {
                   <img src="..." className="rounded" alt="Register-Image" height={200} width={200} />
                 </div>
                 <Formik
-                  initialValues={{ username: '', password: '' }}
+                  initialValues={{ username: '', password: '', password2: '' }}
                   validationSchema={Yup.object({
                     username: Yup.string()
+                      .min(3, 'Must be at least 3 characters.')
                       .max(20, 'Must be 20 characters or less!')
                       .matches(/^[a-zA-Z0-9-_ ]*$/, 'Please, enter valid characters.'),
                     password: Yup.string()
+                      .min(6, 'Must be at least 6 characters.')
                       .max(20, 'Must be 20 characters or less!')
                       .matches(/^[a-zA-Z0-9!?,._-]*$/, 'Please, enter valid characters.'),
+                    password2: Yup.string()
+                      .oneOf([Yup.ref('password'), null], 'Passwords must match.'),
                   })}
-                  onSubmit={(values, { setSubmitting }) => {
-                    setTimeout(() => {
-                      alert(JSON.stringify(values, null, 2));
-                      setSubmitting(false);
-                    }, 400);
+                  onSubmit={(values, { setFieldError, resetForm }) => {
+                    axios.post('/api/v1/signup', { username: values.username, password: values.password })
+                      .then((response) => {
+                        console.log(response.data);
+                        resetForm();
+                      })
+                      .catch((err) => {
+                        console.log(err.status);
+                        setFieldError('username', 'This user already exist.');
+                      });
                   }}
                 >
                   {({
@@ -47,7 +57,7 @@ function Register() {
                     isSubmitting,
                   }) => (
                     <form className="col-12 col-md-6 mt-3 mt-md-0" onSubmit={handleSubmit}>
-                      <h1 className="text-center mb-4">Login</h1>
+                      <h1 className="text-center mb-4">Register</h1>
                       <div className="form-floating mb-3">
                         <input
                           name="username"
@@ -90,22 +100,22 @@ function Register() {
                       </div>
                       <div className="form-floating mb-4">
                         <input
-                          name="password"
-                          id="passwordInput"
-                          className={classNames('form-control', 'rounded-4', { 'is-invalid': errors.password && touched.password })}
-                          aria-describedby="Password"
-                          placeholder="Password"
+                          name="password2"
+                          id="passwordInput2"
+                          className={classNames('form-control', 'rounded-4', { 'is-invalid': errors.password2 && touched.password2 })}
+                          aria-describedby="password2"
+                          placeholder="confirm password"
                           type="password"
                           required
-                          value={values.password}
+                          value={values.password2}
                           onChange={handleChange}
                           onBlur={handleBlur}
                         />
-                        <label htmlFor="passwordInput">
-                          Password
+                        <label htmlFor="passwordInput2">
+                          Confirm password
                         </label>
-                        {errors.password && touched.password ? (
-                          <div className="invalid-feedback">{errors.password}</div>
+                        {errors.password2 && touched.password2 ? (
+                          <div className="invalid-feedback">{errors.password2}</div>
                         ) : null}
                       </div>
                       <button
