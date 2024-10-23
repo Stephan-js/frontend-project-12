@@ -34,7 +34,7 @@ function Login() {
                       .matches(/^[a-zA-Z0-9!?,._-]*$/, 'Please, enter valid characters.'),
                   })}
                   onSubmit={(values, { resetForm, setErrors }) => {
-                    axios.post('/api/v1/login', { username: values.username, password: values.password })
+                    axios.post('/api/account/login', { username: values.username, password: values.password })
                       .then((data) => {
                         localStorage.setItem('token', data.token);
                         resetForm();

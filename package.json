@@ -12,10 +12,6 @@
   "author": "Hacer",
   "license": "MIT",
   "dependencies": {
-    "@hexlet/chat-server": "^2.0.3",
-    "axios": "^1.7.2"
-  },
-  "devDependencies": {
-    "globals": "^15.11.0"
+    "chat-app-server": "^0.4.4"
   }
 }

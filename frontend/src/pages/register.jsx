@@ -36,7 +36,7 @@ function Register() {
                       .oneOf([Yup.ref('password'), null], 'Passwords must match.'),
                   })}
                   onSubmit={(values, { setFieldError, resetForm }) => {
-                    axios.post('/api/v1/signup', { username: values.username, password: values.password })
+                    axios.post('/api/account/signup', { username: values.username, password: values.password })
                       .then((data) => {
                         localStorage.setItem('token', data.token);
                         resetForm();
