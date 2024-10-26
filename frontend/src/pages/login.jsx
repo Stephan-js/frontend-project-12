@@ -35,8 +35,8 @@ function Login() {
                   })}
                   onSubmit={(values, { resetForm, setErrors }) => {
                     axios.post('/api/account/login', { username: values.username, password: values.password })
-                      .then((data) => {
-                        localStorage.setItem('token', data.token);
+                      .then((res) => {
+                        localStorage.setItem('token', res.data.token);
                         resetForm();
                       })
                       .catch((err) => {
