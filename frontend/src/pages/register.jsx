@@ -35,7 +35,7 @@ function Register() {
                     password2: Yup.string()
                       .oneOf([Yup.ref('password'), null], 'Passwords must match.'),
                   })}
-                  onSubmit={(values, { setFieldError, resetForm }) => {
+                  onSubmit={(values, { setErrors, resetForm }) => {
                     axios.post('/api/account/signup', { username: values.username, password: values.password })
                       .then((res) => {
                         localStorage.setItem('token', res.data.token);
@@ -45,7 +45,7 @@ function Register() {
                         if (err.status === 409) {
                           document.location.href = '/login';
                         } else {
-                          setFieldError({ username: true, password2: true, password: 'Sorry, unknown error.' });
+                          setErrors({ username: true, password2: true, password: 'Sorry, unknown error.' });
                         }
                       });
                   }}
