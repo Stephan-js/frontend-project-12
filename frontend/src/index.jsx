@@ -10,11 +10,12 @@ import './scss/styleLogin.scss';
 import Login from './pages/login';
 import Page404 from './pages/page404';
 import Register from './pages/register';
+import Chat from './pages/chat';
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <h1>Developing!</h1>,
+    element: <Chat />,
     errorElement: <Page404 />,
   },
   {
