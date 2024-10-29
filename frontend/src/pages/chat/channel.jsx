@@ -5,9 +5,9 @@ import classNames from 'classnames';
 
 class Channel extends React.PureComponent {
   render() {
-    const { name, active, menu } = this.props;
+    const { name, active, removable } = this.props;
     const btnClass = classNames('w-100', 'mb-1', 'rounded-3', 'text-start', 'btn', { 'btn-secondary': active });
-    if (!menu) {
+    if (!removable) {
       return (
         <li className="nav-item w-100">
           <button
@@ -54,12 +54,12 @@ class Channel extends React.PureComponent {
 Channel.propTypes = {
   name: PropTypes.string.isRequired,
   active: PropTypes.bool,
-  menu: PropTypes.bool,
+  removable: PropTypes.bool,
 };
 
 Channel.defaultProps = {
   active: false,
-  menu: false,
+  removable: true,
 };
 
 export default Channel;
