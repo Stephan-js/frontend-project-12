@@ -17,8 +17,8 @@ function ChatPage() {
       .then((resp) => {
         setChanels(resp.data);
       })
-      .catch((err) => {
-        console.log('lol');
+      .catch(() => {
+        document.location.href = '/login';
       });
   }, []);
 

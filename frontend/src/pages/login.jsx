@@ -33,11 +33,11 @@ function Login() {
                       .max(20, 'Must be 20 characters or less!')
                       .matches(/^[a-zA-Z0-9!?,._-]*$/, 'Please, enter valid characters.'),
                   })}
-                  onSubmit={(values, { resetForm, setErrors }) => {
+                  onSubmit={(values, { setErrors }) => {
                     axios.post('/api/account/login', { username: values.username, password: values.password })
                       .then((res) => {
                         localStorage.setItem('token', res.data.token);
-                        resetForm();
+                        document.location.href = '/';
                       })
                       .catch((err) => {
                         if (err.status === 401) {

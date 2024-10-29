@@ -35,11 +35,11 @@ function Register() {
                     password2: Yup.string()
                       .oneOf([Yup.ref('password'), null], 'Passwords must match.'),
                   })}
-                  onSubmit={(values, { setErrors, resetForm }) => {
+                  onSubmit={(values, { setErrors }) => {
                     axios.post('/api/account/signup', { username: values.username, password: values.password })
                       .then((res) => {
                         localStorage.setItem('token', res.data.token);
-                        resetForm();
+                        document.location.href = '/';
                       })
                       .catch((err) => {
                         if (err.status === 409) {

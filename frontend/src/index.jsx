@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import {
   createBrowserRouter,
   RouterProvider,
+  Navigate,
 } from 'react-router-dom';
 
 import './scss/styleLogin.scss';
@@ -15,7 +16,7 @@ import ChatPage from './pages/chatPage';
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <ChatPage />,
+    element: !localStorage.getItem('token') ? <Navigate to="/login" /> : <ChatPage />,
     errorElement: <Page404 />,
   },
   {

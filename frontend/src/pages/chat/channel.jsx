@@ -4,12 +4,29 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 class Channel extends React.PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = { show: false };
+
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  handleClick() {
+    this.setState(({ show }) => ({ show: !show }));
+  }
+
   render() {
-    const { name, active, removable } = this.props;
+    const {
+      name,
+      id,
+      removable,
+      active,
+    } = this.props;
     const btnClass = classNames('w-100', 'mb-1', 'rounded-3', 'text-start', 'btn', { 'btn-secondary': active });
+
     if (!removable) {
       return (
-        <li className="nav-item w-100">
+        <li id={id} className="nav-item w-100">
           <button
             className={btnClass}
             type="button"
@@ -20,8 +37,10 @@ class Channel extends React.PureComponent {
         </li>
       );
     }
+    const { show } = this.state;
+
     return (
-      <li className="nav-item w-100">
+      <li id={id} className="nav-item w-100">
         <div className="d-flex dropdown btn-group">
           <button
             className={btnClass}
@@ -31,15 +50,16 @@ class Channel extends React.PureComponent {
             {name}
           </button>
           <button
-            className="flex-grow-0 btn dropdown-toggle-split dropdown-toggle"
+            onClick={this.handleClick}
+            className={classNames('flex-grow-0', 'btn', 'dropdown-toggle-split', 'dropdown-toggle', { show })}
             type="button"
             data-bs-toggle="dropdown"
-            aria-expanded="false"
+            aria-expanded={show}
           >
             <span className="visually-hidden">Chanel control</span>
           </button>
           <ul
-            className="dropdown-menu"
+            className={classNames('dropdown-menu', { show })}
             style={{ position: 'absolute', inset: '0px 0px auto auto', transform: 'translate(0px, 40px)' }}
           >
             <li><a className="dropdown-item" href="#">Delete</a></li>
@@ -52,6 +72,7 @@ class Channel extends React.PureComponent {
 }
 
 Channel.propTypes = {
+  id: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
   active: PropTypes.bool,
   removable: PropTypes.bool,
