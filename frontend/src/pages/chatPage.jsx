@@ -39,7 +39,8 @@ function ChatPage() {
               </div>
               <ul className="nav flex-column nav-pills nav-fill px-2 mb-3 overflow-auto h-100 d-block">
                 {channels ? channels.map((chan) => <Channel {...chan} />) : null}
-                <Channel name="third" removable />
+                <Channel name="first" removable />
+                <Channel name="second" removable active />
               </ul>
             </div>
             <div className="col p-0 h-100">
