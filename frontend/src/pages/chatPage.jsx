@@ -29,8 +29,8 @@ function ChatPage() {
           <a className="navbar-brand" href="/">Chat App</a>
         </div>
       </nav>
-      <div className="h-100 container-fluid my-3 my-sm-4 my-md-5">
-        <div className="container h-100 overflow-hidden rounded-4 shadow">
+      <div className="h-100 container-fluid my-4 my-md-5 d-flex">
+        <div className="container h-100 overflow-hidden align-self-center chat rounded-4 shadow">
           <div className="row h-100 bg-white flex-md-row">
             <div className="col-4 col-md-2 border-end px-0 bg-light flex-column h-100 d-flex">
               <div className="d-flex mt-1 justify-content-between mb-2 ps-4 pe-2 p-4">

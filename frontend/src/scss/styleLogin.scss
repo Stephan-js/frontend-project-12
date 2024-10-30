@@ -1,1 +1,13 @@
 @import "bootstrap/scss/bootstrap";
+
+/* Custom chat size */
+.chat {
+  max-height: 600px;
+}
+
+@media (min-width: 1200px) {
+  .chat {
+      max-height: 700px;
+  }
+}
+
