@@ -38,7 +38,7 @@ function ChatPage() {
                 <button type="button" className="p-0 ms-2 ms-md-0 text-primary btn btn-group-vertical">+</button>
               </div>
               <div className="flex-nowrap d-flex flex-row flex-md-column px-2 mt-3 mt-md-0 mb-3 nav-pills overflow-auto h-75 w-100 d-block">
-                {channels ? channels.map((chan) => <Channel {...chan} />) : null}
+                {channels ? channels.map((info) => <Channel {...info} />) : null}
                 <Channel id="123" name="third" removable />
                 <Channel id="1234" name="Fourth" active removable />
               </div>
@@ -47,7 +47,7 @@ function ChatPage() {
               <div className="d-flex flex-column h-100">
                 <div className="bg-light mb-4 p-3 shadow-sm small">
                   <p className="mb-0">
-                    <b>Chanel</b>
+                    <b>Chanele</b>
                   </p>
                   <span className="text-muted">
                     Meseges: ??
