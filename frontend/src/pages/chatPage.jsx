@@ -33,14 +33,12 @@ function ChatPage() {
         <div className="container h-100 overflow-hidden align-self-center chat rounded-4 shadow">
           <div className="d-flex h-100 bg-white flex-column row flex-md-row">
             <div className="col-4 col-md-2 px-md-0 border-bottom border-md-end bg-light d-flex flex-row flex-md-column channels">
-              <div className="d-flex mt-md-1 justify-content-between mb-md-2 ps-2 pe-md-2 p-4">
+              <div className="d-flex mt-md-1 justify-content-between mb-md-2 ps-2 ps-md-4 pe-md-2 p-4">
                 <b>Chaneles</b>
                 <button type="button" className="p-0 ms-2 ms-md-0 text-primary btn btn-group-vertical">+</button>
               </div>
-              <ul className="d-felx flex-row flex-md-column px-2 mb-3 nav-pills overflow-auto h-100 d-block">
+              <ul className="d-felx flex-row flex-md-column px-2 mt-3 mt-md-0 mb-3 nav-pills overflow-auto h-75 w-100 d-block">
                 {channels ? channels.map((chan) => <Channel {...chan} />) : null}
-                <Channel name="first" removable />
-                <Channel name="second" removable active />
               </ul>
             </div>
             <div className="col p-0 h-100">
