@@ -30,7 +30,7 @@ class Channel extends React.PureComponent {
 
     if (!removable) {
       return (
-        <li id={id} className="nav-item w-100 mb-1">
+        <div id={id} className="nav-item w-md-100 me-1 me-md-0 mb-md-1" style={{ 'min-width': 'fit-content' }}>
           <button
             className={classNames('w-100', 'rounded-3', 'text-start', 'btn', { 'btn-secondary': active })}
             type="button"
@@ -38,13 +38,13 @@ class Channel extends React.PureComponent {
             <span># </span>
             {name}
           </button>
-        </li>
+        </div>
       );
     }
     const { show } = this.state;
 
     return (
-      <li id={id} className="nav-item w-100 mb-1">
+      <div id={id} className="nav-item w-md-100 me-1 me-md-0 mb-md-1" style={{ 'min-width': 'fit-content' }}>
         <div className="d-flex btn-group">
           <button
             className={classNames(
@@ -92,7 +92,7 @@ class Channel extends React.PureComponent {
             <li><a className="dropdown-item" href="#">Delete</a></li>
           </ul>
         </div>
-      </li>
+      </div>
     );
   }
 }
