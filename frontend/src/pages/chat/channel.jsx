@@ -8,11 +8,11 @@ class Channel extends React.PureComponent {
     super(props);
     this.state = { show: false };
 
-    this.handleClick = this.handleClick.bind(this);
+    this.handleClickMenu = this.handleClickMenu.bind(this);
     this.handleBlur = this.handleBlur.bind(this);
   }
 
-  handleClick() {
+  handleClickMenu() {
     this.setState(({ show }) => ({ show: !show }));
   }
 
@@ -61,8 +61,8 @@ class Channel extends React.PureComponent {
             {name}
           </button>
           <button
-            onClick={this.handleClick}
-            onBlur={this.handleBlur}
+            onClick={this.handleClickMenu}
+            // onBlur={this.handleBlur}
             className={classNames(
               'flex-grow-0',
               'rounded-3',

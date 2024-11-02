@@ -3,20 +3,21 @@ import PropTypes from 'prop-types';
 
 class Message extends React.PureComponent {
   render() {
-    const { user, message } = this.props;
+    const { id, username, body } = this.props;
     return (
-      <div className="text-break mb-2">
-        <b>{user}</b>
+      <div id={id} className="text-break mb-2">
+        <b>{username}</b>
         {': '}
-        {message}
+        {body}
       </div>
     );
   }
 }
 
 Message.propTypes = {
-  user: PropTypes.string.isRequired,
-  message: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
+  username: PropTypes.string.isRequired,
+  body: PropTypes.string.isRequired,
 };
 
 export default Message;
