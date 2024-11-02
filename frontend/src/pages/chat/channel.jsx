@@ -8,8 +8,15 @@ class Channel extends React.PureComponent {
     super(props);
     this.state = { show: false };
 
+    this.handleClick = this.handleClick.bind(this);
     this.handleClickMenu = this.handleClickMenu.bind(this);
     this.handleBlur = this.handleBlur.bind(this);
+  }
+
+  handleClick(e) {
+    const { onChange } = this.props;
+    const { id } = e.target;
+    if (id) onChange(id);
   }
 
   handleClickMenu() {
@@ -25,13 +32,17 @@ class Channel extends React.PureComponent {
       name,
       id,
       removable,
-      active,
+      activeChannel,
     } = this.props;
+
+    const active = Number(activeChannel) === Number(id);
 
     if (!removable) {
       return (
-        <div id={id} className="nav-item w-md-100 me-1 me-md-0 mb-md-1" style={{ 'min-width': 'fit-content' }}>
+        <div className="nav-item w-md-100 me-1 me-md-0 mb-md-1" style={{ 'min-width': 'fit-content' }}>
           <button
+            id={id}
+            onClick={this.handleClick}
             className={classNames('w-100', 'rounded-3', 'text-start', 'btn', { 'btn-secondary': active })}
             type="button"
           >
@@ -44,9 +55,10 @@ class Channel extends React.PureComponent {
     const { show } = this.state;
 
     return (
-      <div id={id} className="nav-item w-md-100 me-1 me-md-0 mb-md-1" style={{ 'min-width': 'fit-content' }}>
+      <div className="nav-item w-md-100 me-1 me-md-0 mb-md-1" style={{ 'min-width': 'fit-content' }}>
         <div className="d-flex btn-group">
           <button
+            id={id}
             className={classNames(
               'w-100',
               'rounded-3',
@@ -100,12 +112,12 @@ class Channel extends React.PureComponent {
 Channel.propTypes = {
   id: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
-  active: PropTypes.bool,
+  activeChannel: PropTypes.number.isRequired,
+  onChange: PropTypes.func.isRequired,
   removable: PropTypes.bool,
 };
 
 Channel.defaultProps = {
-  active: false,
   removable: true,
 };
 

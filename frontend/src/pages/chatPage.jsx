@@ -8,8 +8,9 @@ import Channel from './chat/channel';
 import Message from './chat/messeg';
 
 function ChatPage() {
+  const [activeChannel, setActive] = useState(1);
   const [channels, setChanels] = useState(null);
-  const [activeChannels, setActive] = useState(1);
+
   const meseges = [{
     id: '1', body: 'Hewwwoooo :3', channelId: '1', username: 'admin',
   },
@@ -46,7 +47,14 @@ function ChatPage() {
                 <button type="button" className="p-0 ms-2 ms-md-0 text-primary btn btn-group-vertical">+</button>
               </div>
               <div className="flex-nowrap d-flex flex-row flex-md-column px-2 mt-3 mt-md-0 mb-3 nav-pills overflow-auto h-75 w-100 d-block">
-                {channels ? channels.map((info) => <Channel {...info} />) : null}
+                {channels ? channels
+                  .map((info) => (
+                    <Channel
+                      {...info}
+                      activeChannel={activeChannel}
+                      onChange={(id) => setActive(id)}
+                    />
+                  )) : null}
                 <Channel id="123" name="third" removable />
               </div>
             </div>
@@ -61,7 +69,9 @@ function ChatPage() {
                   </span>
                 </div>
                 <div className="chat-messages overflow-auto px-5 ">
-                  {meseges ? meseges.map((info) => <Message {...info} />) : null}
+                  {meseges ? meseges
+                    .filter((messege) => messege.channelId === activeChannel)
+                    .map((info) => <Message {...info} />) : null}
                 </div>
                 <div className="mt-auto px-5 py-3">
                   <Formik
