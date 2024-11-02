@@ -5,13 +5,13 @@
   "main": "index.js",
   "scripts": {
     "build": "npm run build --prefix frontend",
-    "start": "start-server -s ./frontend/build",
+    "start": "start-server -s ./frontend/build -p 10000",
     "test": "npm run test --prefix frontend",
     "postinstall": "cd frontend && npm ci"
   },
   "author": "Hacer",
   "license": "MIT",
   "dependencies": {
-    "chat-app-server": "^0.4.7"
+    "chat-app-server": "^0.4.8"
   }
 }

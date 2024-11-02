@@ -18,7 +18,7 @@ function handleServerErrror(err) {
 }
 
 function ChatPage() {
-  const socket = io('http://localhost:10000');
+  const socket = io(document.location.href);
 
   const [activeChannel, setActive] = useState(null);
   const [channels, setChanels] = useState(null);
