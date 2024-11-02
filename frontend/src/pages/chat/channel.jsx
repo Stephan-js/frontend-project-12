@@ -35,7 +35,7 @@ class Channel extends React.PureComponent {
       activeChannel,
     } = this.props;
 
-    const active = Number(activeChannel) === Number(id);
+    const active = activeChannel === id;
 
     if (!removable) {
       return (

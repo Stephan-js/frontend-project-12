@@ -8,7 +8,7 @@ import Channel from './chat/channel';
 import Message from './chat/messeg';
 
 function ChatPage() {
-  const [activeChannel, setActive] = useState(1);
+  const [activeChannel, setActive] = useState('1');
   const [channels, setChanels] = useState(null);
 
   const meseges = [{
