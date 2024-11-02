@@ -2,21 +2,35 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useState, useEffect } from 'react';
 import { Formik } from 'formik';
+import * as Yup from 'yup';
 import axios from 'axios';
 
 import Channel from './chat/channel';
 import Message from './chat/messeg';
 
+function handleServerErrror(err) {
+  if (err.status === 401) {
+    document.location.href = '/login';
+  } else {
+    console.log(err);
+  }
+}
+
 function ChatPage() {
   const [activeChannel, setActive] = useState(null);
   const [channels, setChanels] = useState(null);
+  const [meseges, setMeseges] = useState(null);
 
-  const meseges = [{
-    id: '1', body: 'Hewwwoooo :3', channelId: '1', username: 'admin',
-  },
-  {
-    id: '2', body: 'Hiii!', channelId: '1', username: 'hacer',
-  }];
+  useEffect(() => {
+    setChanels(null);
+    axios.get('/api/messages', {
+      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+    })
+      .then((resp) => {
+        setMeseges(resp.data);
+      })
+      .catch(handleServerErrror);
+  }, []);
 
   useEffect(() => {
     setChanels(null);
@@ -28,9 +42,7 @@ function ChatPage() {
         setChanels(data);
         setActive(data[0].id);
       })
-      .catch(() => {
-        document.location.href = '/login';
-      });
+      .catch(handleServerErrror);
   }, []);
 
   return (
@@ -84,6 +96,23 @@ function ChatPage() {
                 <div className="mt-auto px-5 py-3">
                   <Formik
                     initialValues={{ messege: '' }}
+                    validationSchema={Yup.object({
+                      messege: Yup.string()
+                        .max(160, 'Must be 160 characters or less!'),
+                    })}
+                    onSubmit={({ messege }, { resetForm }) => {
+                      const messegeData = { body: messege, channelId: activeChannel, username: '123' };
+                      axios.post('/api/messages', messegeData, {
+                        headers: {
+                          Authorization: `Bearer ${localStorage.getItem('token')}`,
+                        },
+                      })
+                        .then((resp) => {
+                          setMeseges([...meseges, resp.data]);
+                          resetForm();
+                        })
+                        .catch(handleServerErrror);
+                    }}
                   >
                     {({
                       values,
@@ -107,7 +136,7 @@ function ChatPage() {
                           />
                           <button
                             className="btn btn-group-vertical"
-                            type="button"
+                            type="submit"
                             onSubmit={isSubmitting}
                           >
                             <span className="visually-hidden">Messege input</span>
