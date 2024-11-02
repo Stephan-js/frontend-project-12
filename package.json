@@ -12,6 +12,6 @@
   "author": "Hacer",
   "license": "MIT",
   "dependencies": {
-    "chat-app-server": "^0.4.6"
+    "chat-app-server": "^0.4.7"
   }
 }
