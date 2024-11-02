@@ -71,7 +71,7 @@ function ChatPage() {
                   )) : null}
               </div>
             </div>
-            <div className="col p-0 h-100">
+            <div className="col p-0 messeges">
               <div className="d-flex flex-column h-100">
                 <div className="bg-light mb-4 p-3 shadow-sm small">
                   <p className="mb-0">
@@ -88,7 +88,7 @@ function ChatPage() {
                       .length : '???'}
                   </span>
                 </div>
-                <div className="chat-messages overflow-auto px-5 ">
+                <div className="overflow-auto px-5 ">
                   {meseges ? meseges
                     .filter(({ channelId }) => channelId === activeChannel)
                     .map((info) => <Message {...info} />) : null}
@@ -98,7 +98,8 @@ function ChatPage() {
                     initialValues={{ messege: '' }}
                     validationSchema={Yup.object({
                       messege: Yup.string()
-                        .max(160, 'Must be 160 characters or less!'),
+                        .max(160, 'Must be 160 characters or less!')
+                        .required('Required!'),
                     })}
                     onSubmit={({ messege }, { resetForm }) => {
                       const messegeData = { body: messege, channelId: activeChannel, username: '123' };
