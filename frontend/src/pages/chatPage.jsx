@@ -104,15 +104,13 @@ function ChatPage() {
                         .required('Required!'),
                     })}
                     onSubmit={({ messege }, { resetForm }) => {
+                      resetForm();
                       const messegeData = { body: messege, channelId: activeChannel, username: '123' };
                       axios.post('/api/messages', messegeData, {
                         headers: {
                           Authorization: `Bearer ${localStorage.getItem('token')}`,
                         },
                       })
-                        .then((resp) => {
-                          resetForm();
-                        })
                         .catch(handleServerErrror);
                     }}
                   >
