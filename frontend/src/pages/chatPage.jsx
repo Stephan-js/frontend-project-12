@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
+import io from 'socket.io-client';
 import axios from 'axios';
 
 import Channel from './chat/channel';
@@ -17,23 +18,24 @@ function handleServerErrror(err) {
 }
 
 function ChatPage() {
+  const socket = io('http://localhost:5001');
+
   const [activeChannel, setActive] = useState(null);
   const [channels, setChanels] = useState(null);
-  const [meseges, setMeseges] = useState(null);
+  const [message, setMeseges] = useState([]);
 
   useEffect(() => {
-    setChanels(null);
     axios.get('/api/messages', {
       headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
     })
       .then((resp) => {
-        setMeseges(resp.data);
+        if (resp.data) setMeseges(resp.data);
+        socket.on('newMessage', (newMessage) => setMeseges((prevMessages) => [...prevMessages, newMessage]));
       })
       .catch(handleServerErrror);
   }, []);
 
   useEffect(() => {
-    setChanels(null);
     axios.get('/api/channels', {
       headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
     })
@@ -83,13 +85,13 @@ function ChatPage() {
                   <span className="text-muted">
                     Meseges:
                     {' '}
-                    {meseges ? meseges
+                    {message ? message
                       .filter(({ channelId }) => channelId === activeChannel)
                       .length : '???'}
                   </span>
                 </div>
                 <div className="overflow-auto px-5 ">
-                  {meseges ? meseges
+                  {message ? message
                     .filter(({ channelId }) => channelId === activeChannel)
                     .map((info) => <Message {...info} />) : null}
                 </div>
@@ -109,7 +111,6 @@ function ChatPage() {
                         },
                       })
                         .then((resp) => {
-                          setMeseges([...meseges, resp.data]);
                           resetForm();
                         })
                         .catch(handleServerErrror);
