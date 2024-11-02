@@ -59,6 +59,7 @@ class Channel extends React.PureComponent {
         <div className="d-flex btn-group">
           <button
             id={id}
+            onClick={this.handleClick}
             className={classNames(
               'w-100',
               'rounded-3',

@@ -8,7 +8,7 @@ import Channel from './chat/channel';
 import Message from './chat/messeg';
 
 function ChatPage() {
-  const [activeChannel, setActive] = useState('1');
+  const [activeChannel, setActive] = useState(null);
   const [channels, setChanels] = useState(null);
 
   const meseges = [{
@@ -24,7 +24,9 @@ function ChatPage() {
       headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
     })
       .then((resp) => {
-        setChanels(resp.data);
+        const { data } = resp;
+        setChanels(data);
+        setActive(data[0].id);
       })
       .catch(() => {
         document.location.href = '/login';
@@ -55,22 +57,27 @@ function ChatPage() {
                       onChange={(id) => setActive(id)}
                     />
                   )) : null}
-                <Channel id="123" name="third" removable />
               </div>
             </div>
             <div className="col p-0 h-100">
               <div className="d-flex flex-column h-100">
                 <div className="bg-light mb-4 p-3 shadow-sm small">
                   <p className="mb-0">
-                    <b>Chanele</b>
+                    <b>
+                      Channel
+                    </b>
                   </p>
                   <span className="text-muted">
-                    Meseges: ??
+                    Meseges:
+                    {' '}
+                    {meseges ? meseges
+                      .filter(({ channelId }) => channelId === activeChannel)
+                      .length : '???'}
                   </span>
                 </div>
                 <div className="chat-messages overflow-auto px-5 ">
                   {meseges ? meseges
-                    .filter((messege) => messege.channelId === activeChannel)
+                    .filter(({ channelId }) => channelId === activeChannel)
                     .map((info) => <Message {...info} />) : null}
                 </div>
                 <div className="mt-auto px-5 py-3">
