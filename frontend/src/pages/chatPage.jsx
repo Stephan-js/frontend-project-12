@@ -73,7 +73,6 @@ function ChatPage() {
               .matches(/^[a-zA-Z0-9-_ ]*$/, 'Please, enter valid characters.')
               .required('Required!'),
           })}
-            // eslint-disable-next-line no-unused-vars
           onSubmit={({ channelName }, { resetForm }) => {
             resetForm();
             const channelData = { name: channelName, secret: false };
@@ -87,12 +86,14 @@ function ChatPage() {
         >
           {({
             values,
+            errors,
+            touched,
             handleChange,
             handleBlur,
             handleSubmit,
             isSubmitting,
           }) => (
-            <Form onSubmit={handleSubmit}>
+            <Form noValidate onSubmit={handleSubmit}>
               <Modal.Body>
                 <Form.Group className="form-floating">
                   <Form.Control
@@ -106,12 +107,21 @@ function ChatPage() {
                     value={values.channelName}
                     onChange={handleChange}
                     onBlur={handleBlur}
+                    isInvalid={touched.channelName && !!errors.channelName}
                   />
                   <Form.Label id="channelName-label" htmlFor="channelName-input">Username</Form.Label>
+                  <Form.Control.Feedback type="invalid" tooltip>
+                    {errors.channelName}
+                  </Form.Control.Feedback>
                 </Form.Group>
               </Modal.Body>
               <Modal.Footer>
-                <Button type="submit" onSubmit={isSubmitting} variant="primary">
+                <Button
+                  type="submit"
+                  onSubmit={isSubmitting}
+                  variant="primary"
+                  className="rounded-3"
+                >
                   Save Changes
                 </Button>
               </Modal.Footer>
@@ -200,6 +210,7 @@ function ChatPage() {
                       <Form className="py-1 border rounded-4" onSubmit={handleSubmit}>
                         <Form.Group className="p-1 input-group">
                           <Form.Control
+                            required
                             className="shadow-none border-0 p-0 ps-2 form-control"
                             name="messege"
                             aria-label="New messege"
