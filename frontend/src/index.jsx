@@ -16,16 +16,16 @@ import ChatPage from './pages/chatPage';
 const router = createBrowserRouter([
   {
     path: '/',
-    element: !localStorage.getItem('token') ? <Navigate to="/login" /> : <ChatPage />,
+    element: localStorage.getItem('token') ? <ChatPage /> : <Navigate to="/login" />,
     errorElement: <Page404 />,
   },
   {
     path: '/login',
-    element: <Login />,
+    element: localStorage.getItem('token') ? <Navigate to="/" /> : <Login />,
   },
   {
     path: '/register',
-    element: <Register />,
+    element: localStorage.getItem('token') ? <Navigate to="/" /> : <Register />,
   },
 ]);
 

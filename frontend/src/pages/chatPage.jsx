@@ -102,7 +102,7 @@ function ChatPage() {
                     id="channelName-input"
                     className="rounded-4"
                     aria-describedby="channelName-label"
-                    placeholder="Channel Name"
+                    placeholder="Name"
                     type="text"
                     required
                     value={values.channelName}
@@ -110,7 +110,7 @@ function ChatPage() {
                     onBlur={handleBlur}
                     isInvalid={touched.channelName && !!errors.channelName}
                   />
-                  <Form.Label id="channelName-label" htmlFor="channelName-input">Username</Form.Label>
+                  <Form.Label id="channelName-label" htmlFor="channelName-input">Name</Form.Label>
                   <Form.Control.Feedback type="invalid" tooltip>
                     {errors.channelName}
                   </Form.Control.Feedback>
