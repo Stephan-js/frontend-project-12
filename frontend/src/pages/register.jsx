@@ -1,8 +1,11 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+// eslint-disable-next-line no-unused-vars
+import InputGroup from 'react-bootstrap/InputGroup';
+
 import React from 'react';
 import axios from 'axios';
 import { Formik } from 'formik';
-import classNames from 'classnames';
 import * as Yup from 'yup';
 
 function Register() {
@@ -59,76 +62,69 @@ function Register() {
                     handleSubmit,
                     isSubmitting,
                   }) => (
-                    <form className="col-12 col-md-6 mt-3 mt-md-0" onSubmit={handleSubmit}>
+                    <Form noValidate className="col-12 col-md-6 mt-3 mt-md-0" onSubmit={handleSubmit}>
                       <h1 className="text-center mb-4">Register</h1>
-                      <div className="form-floating mb-3">
-                        <input
+                      <Form.Group className="form-floating mb-4">
+                        <Form.Control
                           name="username"
                           id="usernameInput"
-                          className={classNames('form-control', 'rounded-4', { 'is-invalid': errors.username && touched.username })}
-                          aria-describedby="Username"
+                          className="rounded-4"
+                          aria-describedby="usernameLabel"
                           placeholder="Username"
                           type="text"
                           required
                           value={values.username}
                           onChange={handleChange}
                           onBlur={handleBlur}
+                          isInvalid={touched.username && !!errors.username}
                         />
-                        <label htmlFor="usernameInput">
-                          Username
-                        </label>
-                        {errors.username && touched.username ? (
-                          <div className="invalid-feedback">{errors.username}</div>
-                        ) : null}
-                      </div>
-                      <div className="form-floating mb-4">
-                        <input
+                        <Form.Label id="usernameLabel" htmlFor="usernameInput">Username</Form.Label>
+                        <Form.Control.Feedback type="invalid">{errors.username}</Form.Control.Feedback>
+                      </Form.Group>
+                      <Form.Group className="form-floating mb-4">
+                        <Form.Control
                           name="password"
                           id="passwordInput"
-                          className={classNames('form-control', 'rounded-4', { 'is-invalid': errors.password && touched.password })}
-                          aria-describedby="Password"
+                          className="rounded-4"
+                          aria-describedby="passwordLabel"
                           placeholder="Password"
                           type="password"
                           required
                           value={values.password}
                           onChange={handleChange}
                           onBlur={handleBlur}
+                          isInvalid={(touched.password && !!errors.password)
+                            || (touched.password2 && !!errors.password2)}
                         />
-                        <label htmlFor="passwordInput">
-                          Password
-                        </label>
-                        {errors.password && touched.password ? (
-                          <div className="invalid-feedback">{errors.password}</div>
-                        ) : null}
-                      </div>
-                      <div className="form-floating mb-4">
-                        <input
+                        <Form.Label id="passwordLabel" htmlFor="passwordInput">Username</Form.Label>
+                        <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>
+                      </Form.Group>
+                      <Form.Group className="form-floating mb-4">
+                        <Form.Control
                           name="password2"
                           id="passwordInput2"
-                          className={classNames('form-control', 'rounded-4', { 'is-invalid': errors.password2 && touched.password2 })}
+                          className="rounded-4"
                           aria-describedby="password2"
-                          placeholder="confirm password"
+                          placeholder="passwordLabel2"
                           type="password"
                           required
                           value={values.password2}
                           onChange={handleChange}
                           onBlur={handleBlur}
+                          isInvalid={touched.password2 && !!errors.password2}
                         />
-                        <label htmlFor="passwordInput2">
-                          Confirm password
-                        </label>
-                        {errors.password2 && touched.password2 ? (
-                          <div className="invalid-feedback">{errors.password2}</div>
-                        ) : null}
-                      </div>
-                      <button
+                        <Form.Label id="passwordLabel2" htmlFor="passwordInput2">Confirm password</Form.Label>
+                        <Form.Control.Feedback type="invalid">{errors.password2}</Form.Control.Feedback>
+                      </Form.Group>
+                      <Button
                         onSubmit={isSubmitting}
                         type="submit"
-                        className="w-100 mb-3 btn btn-outline-dark rounded-5"
+                        variant="outline-dark"
+                        className="w-100 mb-3 rounded-5"
                       >
                         Submit
-                      </button>
-                    </form>
+                      </Button>
+                    </Form>
                   )}
                 </Formik>
               </div>
