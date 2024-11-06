@@ -84,7 +84,7 @@ function Register() {
                           name="password"
                           id="password-input"
                           className="rounded-4"
-                          aria-describedby="passwordLabel"
+                          aria-describedby="password-label"
                           placeholder="Password"
                           type="password"
                           required
@@ -94,7 +94,7 @@ function Register() {
                           isInvalid={(touched.password && !!errors.password)
                             || (touched.password2 && !!errors.password2)}
                         />
-                        <Form.Label id="password-label" htmlFor="password-input">Username</Form.Label>
+                        <Form.Label id="password-label" htmlFor="password-input">Password</Form.Label>
                         <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>
                       </Form.Group>
                       <Form.Group className="form-floating mb-4">
