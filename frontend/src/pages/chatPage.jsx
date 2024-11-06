@@ -62,7 +62,7 @@ function ChatPage() {
         show={addChannelShow}
         onHide={() => setShowChanMenu(false)}
       >
-        <Modal.Header closeButton>
+        <Modal.Header>
           <Modal.Title id="modal-title">Add chanel</Modal.Title>
         </Modal.Header>
         <Formik
@@ -71,8 +71,7 @@ function ChatPage() {
             // need to add manual validation for big words
             channelName: Yup.string()
               .max(9, 'Must be 9 characters or less!')
-              .matches(/^[a-zA-Z0-9-_ ]*$/, 'Please, enter valid characters.')
-              .required('Required!'),
+              .matches(/^[a-zA-Z0-9-_ ]*$/, 'Please, enter valid characters.'),
           })}
           onSubmit={({ channelName }, { resetForm }) => {
             resetForm();
@@ -82,7 +81,12 @@ function ChatPage() {
                 Authorization: `Bearer ${localStorage.getItem('token')}`,
               },
             })
+              .then(() => {
+                // Show complite messege;
+              })
               .catch(handleServerError);
+
+            setShowChanMenu(false);
           }}
         >
           {({
@@ -102,7 +106,7 @@ function ChatPage() {
                     id="channelName-input"
                     className="rounded-4"
                     aria-describedby="channelName-label"
-                    placeholder="Name"
+                    placeholder="Channel Name"
                     type="text"
                     required
                     value={values.channelName}
@@ -110,7 +114,7 @@ function ChatPage() {
                     onBlur={handleBlur}
                     isInvalid={touched.channelName && !!errors.channelName}
                   />
-                  <Form.Label id="channelName-label" htmlFor="channelName-input">Name</Form.Label>
+                  <Form.Label id="channelName-label" htmlFor="channelName-input">Channel Name</Form.Label>
                   <Form.Control.Feedback type="invalid" tooltip>
                     {errors.channelName}
                   </Form.Control.Feedback>
@@ -118,9 +122,17 @@ function ChatPage() {
               </Modal.Body>
               <Modal.Footer>
                 <Button
+                  onClick={() => setShowChanMenu(false)}
+                  type="button"
+                  variant="secondary"
+                  className="rounded-3"
+                >
+                  Cancel
+                </Button>
+                <Button
                   type="submit"
                   onSubmit={isSubmitting}
-                  variant="primary"
+                  variant="dark"
                   className="rounded-3"
                 >
                   Save Changes
