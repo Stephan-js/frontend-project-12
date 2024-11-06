@@ -12,6 +12,7 @@ import Message from './chat/messeg';
 function handleServerErrror(err) {
   if (err.status === 401) {
     document.location.href = '/login';
+    localStorage.setItem('token', null);
   } else {
     console.log(err);
   }

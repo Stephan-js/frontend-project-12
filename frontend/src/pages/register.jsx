@@ -1,7 +1,5 @@
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-// eslint-disable-next-line no-unused-vars
-import InputGroup from 'react-bootstrap/InputGroup';
 
 import React from 'react';
 import axios from 'axios';
