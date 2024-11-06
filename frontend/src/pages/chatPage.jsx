@@ -49,6 +49,23 @@ function ChatPage() {
 
   return (
     <div className="h-100 flex-column d-flex">
+      <div className="modal" tabIndex="-1">
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title">Modal title</h5>
+              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
+            </div>
+            <div className="modal-body">
+              <p>Modal body text goes here.</p>
+            </div>
+            <div className="modal-footer">
+              <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" className="btn btn-primary">Save changes</button>
+            </div>
+          </div>
+        </div>
+      </div>
       <nav className="navbar navbar-expand-lg navbar-light shadow-sm">
         <div className="container">
           <a className="navbar-brand" href="/">Chat App</a>
@@ -60,7 +77,7 @@ function ChatPage() {
             <div className="col-4 col-md-2 px-md-0 border-bottom border-md-end-0 border-md-right bg-light d-flex flex-row flex-md-column channels">
               <div className="d-flex mt-md-1 justify-content-between mb-md-2 ps-2 ps-md-4 pe-md-2 p-4">
                 <b>Chaneles</b>
-                <button type="button" className="p-0 ms-2 ms-md-0 text-primary btn btn-group-vertical">+</button>
+                <button data-bs-toggle="modal" data-bs-target="#exampleModal" type="button" className="p-0 ms-2 ms-md-0 text-primary btn btn-group-vertical">+</button>
               </div>
               <div className="flex-nowrap d-flex flex-row flex-md-column px-2 mt-3 mt-md-0 mb-3 nav-pills overflow-auto h-75 w-100 d-block">
                 {channels ? channels
