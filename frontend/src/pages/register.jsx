@@ -46,7 +46,7 @@ function Register() {
                         if (err.status === 409) {
                           document.location.href = '/login';
                         } else {
-                          setErrors({ username: true, password2: true, password: 'Sorry, unknown error.' });
+                          setErrors({ username: true, password: true, password2: 'Sorry, unknown error.' });
                         }
                       });
                   }}

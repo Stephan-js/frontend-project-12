@@ -1,5 +1,8 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable react/jsx-props-no-spreading */
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
+
 import React, { useState, useEffect } from 'react';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
@@ -9,10 +12,10 @@ import axios from 'axios';
 import Channel from './chat/channel';
 import Message from './chat/messeg';
 
-function handleServerErrror(err) {
+function handleServerError(err) {
   if (err.status === 401) {
     document.location.href = '/login';
-    localStorage.setItem('token', null);
+    localStorage.removeItem('token');
   } else {
     console.log(err);
   }
@@ -24,6 +27,7 @@ function ChatPage() {
   const [activeChannel, setActive] = useState(null);
   const [channels, setChanels] = useState(null);
   const [message, setMeseges] = useState([]);
+  const [addChannelShow, setShowChanMenu] = useState(false);
 
   useEffect(() => {
     axios.get('/api/messages', {
@@ -33,7 +37,7 @@ function ChatPage() {
         if (resp.data) setMeseges(resp.data);
         socket.on('newMessage', (newMessage) => setMeseges((prevMessages) => [...prevMessages, newMessage]));
       })
-      .catch(handleServerErrror);
+      .catch(handleServerError);
   }, []);
 
   useEffect(() => {
@@ -44,27 +48,77 @@ function ChatPage() {
         const { data } = resp;
         setChanels(data);
         setActive(data[0].id);
+        socket.on('newChannel', (newChannel) => setChanels((prevChannels) => [...prevChannels, newChannel]));
       })
-      .catch(handleServerErrror);
+      .catch(handleServerError);
   }, []);
 
   return (
     <div className="h-100 flex-column d-flex">
-      <div id="modal" className="modal fade" tabIndex="-1" role="dialog" style={{ display: 'none' }} aria-modal="true">
-        <div className="modal-dialog" role="document">
-          <div className="modal-content">
-            <div className="modal-header">
-              HIHI
-            </div>
-            <div className="modal-body">
-              123123
-            </div>
-            <div className="modal-footer">
-              <button className="btn" type="button" data-btn-status="less">Hi</button>
-            </div>
-          </div>
-        </div>
-      </div>
+      <Modal
+        className="rounded-3"
+        aria-labelledby="modal-title"
+        centered
+        show={addChannelShow}
+        onHide={() => setShowChanMenu(false)}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title id="modal-title">Add chanel</Modal.Title>
+        </Modal.Header>
+        <Formik
+          initialValues={{ channelName: '' }}
+          validationSchema={Yup.object({
+            channelName: Yup.string()
+              .max(16, 'Must be 16 characters or less!')
+              .matches(/^[a-zA-Z0-9-_ ]*$/, 'Please, enter valid characters.')
+              .required('Required!'),
+          })}
+            // eslint-disable-next-line no-unused-vars
+          onSubmit={({ channelName }, { resetForm }) => {
+            resetForm();
+            const channelData = { name: channelName, secret: false };
+            axios.post('/api/channels', channelData, {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+              },
+            })
+              .catch(handleServerError);
+          }}
+        >
+          {({
+            values,
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            isSubmitting,
+          }) => (
+            <Form onSubmit={handleSubmit}>
+              <Modal.Body>
+                <Form.Group className="form-floating">
+                  <Form.Control
+                    name="channelName"
+                    id="channelName-input"
+                    className="rounded-4"
+                    aria-describedby="channelName-label"
+                    placeholder="Channel Name"
+                    type="text"
+                    required
+                    value={values.channelName}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  />
+                  <Form.Label id="channelName-label" htmlFor="channelName-input">Username</Form.Label>
+                </Form.Group>
+              </Modal.Body>
+              <Modal.Footer>
+                <Button type="submit" onSubmit={isSubmitting} variant="primary">
+                  Save Changes
+                </Button>
+              </Modal.Footer>
+            </Form>
+          )}
+        </Formik>
+      </Modal>
       <nav className="navbar navbar-expand-lg navbar-light shadow-sm">
         <div className="container">
           <a className="navbar-brand" href="/">Chat App</a>
@@ -77,6 +131,7 @@ function ChatPage() {
               <div className="d-flex mt-md-1 justify-content-between mb-md-2 ps-2 ps-md-4 pe-md-2 p-4">
                 <b>Chaneles</b>
                 <button
+                  onClick={() => setShowChanMenu(true)}
                   type="button"
                   className="p-0 ms-2 ms-md-0 text-primary btn btn-group-vertical"
                 >
@@ -132,21 +187,19 @@ function ChatPage() {
                           Authorization: `Bearer ${localStorage.getItem('token')}`,
                         },
                       })
-                        .catch(handleServerErrror);
+                        .catch(handleServerError);
                     }}
                   >
                     {({
                       values,
-                      touched,
-                      errors,
                       handleChange,
                       handleBlur,
                       handleSubmit,
                       isSubmitting,
                     }) => (
-                      <form className="py-1 border rounded-4" onSubmit={handleSubmit}>
-                        <div className="p-1 input-group has-validation">
-                          <input
+                      <Form className="py-1 border rounded-4" onSubmit={handleSubmit}>
+                        <Form.Group className="p-1 input-group">
+                          <Form.Control
                             className="shadow-none border-0 p-0 ps-2 form-control"
                             name="messege"
                             aria-label="New messege"
@@ -163,8 +216,8 @@ function ChatPage() {
                             <span className="visually-hidden">Messege input</span>
                             =&gt;
                           </button>
-                        </div>
-                      </form>
+                        </Form.Group>
+                      </Form>
                     )}
                   </Formik>
                 </div>
@@ -173,7 +226,6 @@ function ChatPage() {
           </div>
         </div>
       </div>
-      <div className="modal-backdrop fade" style={{ display: 'none' }} />
     </div>
   );
 }
