@@ -102,8 +102,8 @@ function Register() {
                           name="password2"
                           id="password-input2"
                           className="rounded-4"
-                          aria-describedby="password2"
-                          placeholder="password-label2"
+                          aria-describedby="password-label2"
+                          placeholder="Confirm Password"
                           type="password"
                           required
                           value={values.password2}
@@ -111,7 +111,7 @@ function Register() {
                           onBlur={handleBlur}
                           isInvalid={touched.password2 && !!errors.password2}
                         />
-                        <Form.Label id="password-label2" htmlFor="password-input2">Confirm password</Form.Label>
+                        <Form.Label id="password-label2" htmlFor="password-input2">Confirm Password</Form.Label>
                         <Form.Control.Feedback type="invalid">{errors.password2}</Form.Control.Feedback>
                       </Form.Group>
                       <Button
