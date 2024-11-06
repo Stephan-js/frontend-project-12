@@ -63,9 +63,9 @@ function Login() {
                       <Form.Group className="form-floating mb-3">
                         <Form.Control
                           name="username"
-                          id="usernameInput"
+                          id="username-input"
                           className="rounded-4"
-                          aria-describedby="usernameLabel"
+                          aria-describedby="username-label"
                           placeholder="Username"
                           type="text"
                           required
@@ -74,15 +74,15 @@ function Login() {
                           onBlur={handleBlur}
                           isInvalid={touched.username && !!errors.username}
                         />
-                        <Form.Label id="usernameLabel" htmlFor="usernameInput">Username</Form.Label>
+                        <Form.Label id="username-label" htmlFor="username-input">Username</Form.Label>
                         <Form.Control.Feedback type="invalid">{errors.username}</Form.Control.Feedback>
                       </Form.Group>
                       <Form.Group className="form-floating mb-4">
                         <Form.Control
                           name="password"
-                          id="passwordInput"
+                          id="password-input"
                           className="rounded-4"
-                          aria-describedby="passwordLabel"
+                          aria-describedby="password-label"
                           placeholder="Password"
                           type="password"
                           required
@@ -91,7 +91,7 @@ function Login() {
                           onBlur={handleBlur}
                           isInvalid={touched.password && !!errors.password}
                         />
-                        <Form.Label id="passwordLabel" htmlFor="passwordInput">Password</Form.Label>
+                        <Form.Label id="password-label" htmlFor="password-input">Password</Form.Label>
                         <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>
                       </Form.Group>
                       <Button

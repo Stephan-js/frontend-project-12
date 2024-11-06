@@ -65,9 +65,9 @@ function Register() {
                       <Form.Group className="form-floating mb-4">
                         <Form.Control
                           name="username"
-                          id="usernameInput"
+                          id="username-input"
                           className="rounded-4"
-                          aria-describedby="usernameLabel"
+                          aria-describedby="username-label"
                           placeholder="Username"
                           type="text"
                           required
@@ -76,13 +76,13 @@ function Register() {
                           onBlur={handleBlur}
                           isInvalid={touched.username && !!errors.username}
                         />
-                        <Form.Label id="usernameLabel" htmlFor="usernameInput">Username</Form.Label>
+                        <Form.Label id="username-label" htmlFor="username-input">Username</Form.Label>
                         <Form.Control.Feedback type="invalid">{errors.username}</Form.Control.Feedback>
                       </Form.Group>
                       <Form.Group className="form-floating mb-4">
                         <Form.Control
                           name="password"
-                          id="passwordInput"
+                          id="password-input"
                           className="rounded-4"
                           aria-describedby="passwordLabel"
                           placeholder="Password"
@@ -94,16 +94,16 @@ function Register() {
                           isInvalid={(touched.password && !!errors.password)
                             || (touched.password2 && !!errors.password2)}
                         />
-                        <Form.Label id="passwordLabel" htmlFor="passwordInput">Username</Form.Label>
+                        <Form.Label id="password-label" htmlFor="password-input">Username</Form.Label>
                         <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>
                       </Form.Group>
                       <Form.Group className="form-floating mb-4">
                         <Form.Control
                           name="password2"
-                          id="passwordInput2"
+                          id="password-input2"
                           className="rounded-4"
                           aria-describedby="password2"
-                          placeholder="passwordLabel2"
+                          placeholder="password-label2"
                           type="password"
                           required
                           value={values.password2}
@@ -111,7 +111,7 @@ function Register() {
                           onBlur={handleBlur}
                           isInvalid={touched.password2 && !!errors.password2}
                         />
-                        <Form.Label id="passwordLabel2" htmlFor="passwordInput2">Confirm password</Form.Label>
+                        <Form.Label id="password-label2" htmlFor="password-input2">Confirm password</Form.Label>
                         <Form.Control.Feedback type="invalid">{errors.password2}</Form.Control.Feedback>
                       </Form.Group>
                       <Button
