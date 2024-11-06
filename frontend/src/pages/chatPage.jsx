@@ -68,8 +68,9 @@ function ChatPage() {
         <Formik
           initialValues={{ channelName: '' }}
           validationSchema={Yup.object({
+            // need to add manual validation for big words
             channelName: Yup.string()
-              .max(16, 'Must be 16 characters or less!')
+              .max(9, 'Must be 9 characters or less!')
               .matches(/^[a-zA-Z0-9-_ ]*$/, 'Please, enter valid characters.')
               .required('Required!'),
           })}
