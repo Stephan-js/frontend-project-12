@@ -22,7 +22,11 @@ function handleServerError(err) {
 }
 
 function ChatPage() {
-  const socket = io(document.location.href);
+  const socket = io({
+    extraHeaders: {
+      authorization: `Bearer ${localStorage.getItem('token')}`,
+    },
+  });
 
   const [activeChannel, setActive] = useState(null);
   const [channels, setChanels] = useState(null);
@@ -35,7 +39,6 @@ function ChatPage() {
     })
       .then((resp) => {
         if (resp.data) setMeseges(resp.data);
-        socket.on('newMessage', (newMessage) => setMeseges((prevMessages) => [...prevMessages, newMessage]));
       })
       .catch(handleServerError);
   }, []);
@@ -48,9 +51,27 @@ function ChatPage() {
         const { data } = resp;
         setChanels(data);
         setActive(data[0].id);
-        socket.on('newChannel', (newChannel) => setChanels((prevChannels) => [...prevChannels, newChannel]));
       })
       .catch(handleServerError);
+  }, []);
+
+  useEffect(() => {
+    socket.on('newMessage', (respond) => setMeseges((prevMessages) => [...prevMessages, respond]));
+    socket.on('newChannel', (newChannel) => setChanels((prevChannels) => [...prevChannels, newChannel]));
+
+    socket.on('connect_error', (err) => {
+      if (err.message === 'invalid token') {
+        document.location.href = '/login';
+        localStorage.removeItem('token');
+      }
+    });
+
+    socket.on('connect_failed', () => {
+      console.log('Connection Failed!');
+    });
+    socket.on('disconnect', () => {
+      console.log('Disconnected!');
+    });
   }, []);
 
   return (
@@ -204,7 +225,7 @@ function ChatPage() {
                     })}
                     onSubmit={({ messege }, { resetForm }) => {
                       resetForm();
-                      const messegeData = { body: messege, channelId: activeChannel, username: '123' };
+                      const messegeData = { body: messege, channelId: activeChannel };
                       axios.post('/api/messages', messegeData, {
                         headers: {
                           Authorization: `Bearer ${localStorage.getItem('token')}`,
