@@ -135,7 +135,7 @@ function ChatPage() {
                   variant="dark"
                   className="rounded-3"
                 >
-                  Save Changes
+                  Save Channel
                 </Button>
               </Modal.Footer>
             </Form>
