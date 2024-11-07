@@ -12,17 +12,9 @@ import axios from 'axios';
 import Channel from './chat/channel';
 import Message from './chat/messeg';
 
-function handleServerError(err) {
-  if (err.status === 401) {
-    document.location.href = '/login';
-    localStorage.removeItem('token');
-  } else {
-    console.log(err);
-  }
-}
-
 function ChatPage() {
   const socket = io({
+    reconnection: false,
     extraHeaders: {
       authorization: `Bearer ${localStorage.getItem('token')}`,
     },
@@ -31,7 +23,29 @@ function ChatPage() {
   const [activeChannel, setActive] = useState(null);
   const [channels, setChanels] = useState(null);
   const [message, setMeseges] = useState([]);
+
   const [addChannelShow, setShowChanMenu] = useState(false);
+  const [connectProblemShow, setConnectionMenu] = useState(false);
+  const [loginProblemShow, setReloginMenu] = useState(false);
+
+  const handleServerError = (err) => {
+    if (err.status === 401) {
+      setReloginMenu(true);
+      localStorage.removeItem('token');
+    }
+  };
+
+  const tryReconnect = (e) => {
+    e.target.disabled = true;
+    socket.io.open((err) => {
+      if (!err) {
+        setConnectionMenu(false);
+      }
+    });
+    setTimeout(() => {
+      e.target.disabled = false;
+    }, 2000);
+  };
 
   useEffect(() => {
     axios.get('/api/messages', {
@@ -59,23 +73,57 @@ function ChatPage() {
     socket.on('newMessage', (respond) => setMeseges((prevMessages) => [...prevMessages, respond]));
     socket.on('newChannel', (newChannel) => setChanels((prevChannels) => [...prevChannels, newChannel]));
 
-    socket.on('connect_error', (err) => {
-      if (err.message === 'invalid token') {
-        document.location.href = '/login';
-        localStorage.removeItem('token');
-      }
-    });
-
-    socket.on('connect_failed', () => {
-      console.log('Connection Failed!');
-    });
     socket.on('disconnect', () => {
-      console.log('Disconnected!');
+      setConnectionMenu(true);
     });
   }, []);
 
   return (
     <div className="h-100 flex-column d-flex">
+      <Modal
+        className="rounded-3"
+        centered
+        show={loginProblemShow}
+        backdrop="static"
+        keyboard={false}
+      >
+        <Modal.Header>
+          <Modal.Title>Oops!</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          It looks like you were signed out of your account. Please sign in again.
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            className="rounded-3"
+            variant="dark"
+            onClick={() => { document.location.href = '/login'; }}
+          >
+            To Login
+          </Button>
+        </Modal.Footer>
+      </Modal>
+      <Modal
+        className="rounded-3"
+        centered
+        show={connectProblemShow}
+        onHide={() => setConnectionMenu(false)}
+        backdrop="static"
+        keyboard={false}
+      >
+        <Modal.Header>
+          <Modal.Title>Oops!</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          It looks like you lost connection with the server.
+          Please try reconnect or come back later!
+        </Modal.Body>
+        <Modal.Footer>
+          <Button className="rounded-3" variant="danger" onClick={tryReconnect}>
+            Reconnect
+          </Button>
+        </Modal.Footer>
+      </Modal>
       <Modal
         className="rounded-3"
         aria-labelledby="modal-title"
@@ -91,6 +139,7 @@ function ChatPage() {
           validationSchema={Yup.object({
             // need to add manual validation for big words
             channelName: Yup.string()
+              .min(3, 'Must be at least 3 characters!')
               .max(9, 'Must be 9 characters or less!')
               .matches(/^[a-zA-Z0-9-_ ]*$/, 'Please, enter valid characters.'),
           })}
@@ -129,7 +178,6 @@ function ChatPage() {
                     aria-describedby="channelName-label"
                     placeholder="Channel Name"
                     type="text"
-                    required
                     value={values.channelName}
                     onChange={handleChange}
                     onBlur={handleBlur}
