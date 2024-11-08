@@ -35,18 +35,6 @@ function ChatPage() {
     }
   };
 
-  const tryReconnect = (e) => {
-    e.target.disabled = true;
-    socket.io.open((err) => {
-      if (!err) {
-        setConnectionMenu(false);
-      }
-    });
-    setTimeout(() => {
-      e.target.disabled = false;
-    }, 2000);
-  };
-
   useEffect(() => {
     axios.get('/api/messages', {
       headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
@@ -88,6 +76,7 @@ function ChatPage() {
 
   return (
     <div className="h-100 flex-column d-flex">
+      {/* Modals Part */}
       <Modal
         className="rounded-3"
         centered
@@ -127,7 +116,21 @@ function ChatPage() {
           Please try reconnect or come back later!
         </Modal.Body>
         <Modal.Footer>
-          <Button className="rounded-3" variant="danger" onClick={tryReconnect}>
+          <Button
+            className="rounded-3"
+            variant="danger"
+            onClick={(e) => {
+              e.target.disabled = true;
+              socket.io.open((err) => {
+                if (!err) {
+                  setConnectionMenu(false);
+                }
+              });
+              setTimeout(() => {
+                e.target.disabled = false;
+              }, 2000);
+            }}
+          >
             Reconnect
           </Button>
         </Modal.Footer>
@@ -176,7 +179,7 @@ function ChatPage() {
               },
             })
               .then(() => {
-                // Show complite messege;
+                // Show uniq complite messege
               })
               .catch(handleServerError);
 
@@ -235,7 +238,9 @@ function ChatPage() {
           )}
         </Formik>
       </Modal>
+      {/* Actual chat part */}
       <nav className="navbar navbar-expand-lg navbar-light shadow-sm">
+        {/* TODO: Add exit button or/and menue button */}
         <div className="container">
           <a className="navbar-brand" href="/">Chat App</a>
         </div>

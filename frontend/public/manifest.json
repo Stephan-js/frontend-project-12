@@ -1,9 +1,10 @@
 {
   "short_name": "Chat App",
-  "name": "Just a chat",
+  "name": "Just a chat :)",
   "icons": [
     
   ],
+  "start_url": "/",
   "display": "standalone",
   "theme_color": "#000000",
   "background_color": "#ffffff"
