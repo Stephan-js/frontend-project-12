@@ -74,7 +74,10 @@ function ChatPage() {
     socket.on('newChannel', (newChannel) => setChanels((prevChannels) => [...prevChannels, newChannel]));
     socket.on('removeChannel', (deleted) => setChanels((prevChannels) => {
       const newChanels = prevChannels.filter(({ id }) => id !== deleted.id);
-      if (deleted.id === activeChannel) setActive(newChanels[0].id);
+      setActive((pervActive) => {
+        if (deleted.id === pervActive) return prevChannels[0].id;
+        return pervActive;
+      });
       return newChanels;
     }));
 
@@ -141,14 +144,29 @@ function ChatPage() {
         </Modal.Header>
         <Formik
           initialValues={{ channelName: '' }}
-          validationSchema={Yup.object({
-            // need to add manual validation for big words
-            channelName: Yup.string()
-              .required('Required')
-              .min(3, 'Must be at least 3 characters.')
-              .max(9, 'Must be 9 characters or less.')
-              .matches(/^[a-zA-Z0-9-_ ]*$/, 'Please, enter valid characters.'),
-          })}
+          validate={({ channelName }) => {
+            const errors = {};
+            if (!channelName) {
+              errors.channelName = 'Requaired';
+              return errors;
+            } if (channelName.length < 3) {
+              errors.channelName = 'Need to be at least 3 characters';
+              return errors;
+            }
+            const eachWord = channelName.split(' ');
+
+            if (eachWord.length > 2) {
+              errors.channelName = 'Too long!';
+              return errors;
+            }
+            eachWord.forEach((word) => {
+              if (word.length > 9) {
+                errors.channelName = 'Too long!';
+              }
+            });
+
+            return errors;
+          }}
           onSubmit={({ channelName }, { resetForm }) => {
             resetForm();
             const channelData = { name: channelName, secret: false };
