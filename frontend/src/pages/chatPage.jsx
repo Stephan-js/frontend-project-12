@@ -72,6 +72,11 @@ function ChatPage() {
   useEffect(() => {
     socket.on('newMessage', (respond) => setMeseges((prevMessages) => [...prevMessages, respond]));
     socket.on('newChannel', (newChannel) => setChanels((prevChannels) => [...prevChannels, newChannel]));
+    socket.on('removeChannel', (deleted) => setChanels((prevChannels) => {
+      const newChanels = prevChannels.filter(({ id }) => id !== deleted.id);
+      if (deleted.id === activeChannel) setActive(newChanels[0].id);
+      return newChanels;
+    }));
 
     socket.on('disconnect', () => {
       setConnectionMenu(true);
@@ -139,8 +144,9 @@ function ChatPage() {
           validationSchema={Yup.object({
             // need to add manual validation for big words
             channelName: Yup.string()
-              .min(3, 'Must be at least 3 characters!')
-              .max(9, 'Must be 9 characters or less!')
+              .required('Required')
+              .min(3, 'Must be at least 3 characters.')
+              .max(9, 'Must be 9 characters or less.')
               .matches(/^[a-zA-Z0-9-_ ]*$/, 'Please, enter valid characters.'),
           })}
           onSubmit={({ channelName }, { resetForm }) => {
@@ -236,7 +242,8 @@ function ChatPage() {
                     <Channel
                       {...info}
                       activeChannel={activeChannel}
-                      onChange={(id) => setActive(id)}
+                      handleErr={(err) => handleServerError(err)}
+                      setActive={(id) => setActive(id)}
                     />
                   )) : null}
               </div>

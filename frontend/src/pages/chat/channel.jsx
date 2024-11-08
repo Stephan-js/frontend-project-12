@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
+import axios from 'axios';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
@@ -10,13 +11,14 @@ class Channel extends React.PureComponent {
 
     this.handleClick = this.handleClick.bind(this);
     this.handleClickMenu = this.handleClickMenu.bind(this);
+    this.handleDeleteChannel = this.handleDeleteChannel.bind(this);
     this.handleBlur = this.handleBlur.bind(this);
   }
 
   handleClick(e) {
-    const { onChange } = this.props;
+    const { setActive } = this.props;
     const { id } = e.target;
-    if (id) onChange(id);
+    if (id) setActive(id);
   }
 
   handleClickMenu() {
@@ -27,6 +29,16 @@ class Channel extends React.PureComponent {
     this.setState({ show: false });
   }
 
+  handleDeleteChannel(e) {
+    const { handleErr } = this.props;
+    const { id } = e.target;
+
+    axios.delete(`/api/channels/${id}`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+    })
+      .catch(handleErr);
+  }
+
   render() {
     const {
       name,
@@ -34,7 +46,6 @@ class Channel extends React.PureComponent {
       removable,
       activeChannel,
     } = this.props;
-
     const active = activeChannel === id;
 
     if (!removable) {
@@ -101,8 +112,8 @@ class Channel extends React.PureComponent {
               transform: 'translate(0px, 40px)',
             }}
           >
-            <li><a className="dropdown-item" href="#">Rename</a></li>
-            <li><a className="dropdown-item" href="#">Delete</a></li>
+            <li><a id={id} className="dropdown-item" href="#">Rename</a></li>
+            <li><a id={id} className="dropdown-item" onClick={this.handleDeleteChannel} href="#">Delete</a></li>
           </ul>
         </div>
       </div>
@@ -114,7 +125,8 @@ Channel.propTypes = {
   id: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
   activeChannel: PropTypes.number.isRequired,
-  onChange: PropTypes.func.isRequired,
+  setActive: PropTypes.func.isRequired,
+  handleErr: PropTypes.func.isRequired,
   removable: PropTypes.bool,
 };
 
