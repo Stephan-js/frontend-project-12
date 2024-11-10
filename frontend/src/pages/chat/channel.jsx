@@ -41,13 +41,10 @@ class Channel extends React.PureComponent {
   }
 
   handleRenameChannel(e) {
-    const { handleErr } = this.props;
+    const { handleRename } = this.props;
     const { id } = e.target;
 
-    axios.delete(`/api/channels/${id}`, {
-      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-    })
-      .catch(handleErr);
+    handleRename({ type: 'rename', id });
   }
 
   render() {
@@ -123,7 +120,7 @@ class Channel extends React.PureComponent {
               transform: 'translate(0px, 40px)',
             }}
           >
-            <li><a id={id} className="dropdown-item" href="#">Rename</a></li>
+            <li><a id={id} className="dropdown-item" onClick={this.handleRenameChannel} href="#">Rename</a></li>
             <li><a id={id} className="dropdown-item" onClick={this.handleDeleteChannel} href="#">Delete</a></li>
           </ul>
         </div>
@@ -136,6 +133,7 @@ Channel.propTypes = {
   id: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
   activeChannel: PropTypes.number.isRequired,
+  handleRename: PropTypes.func.isRequired,
   setActive: PropTypes.func.isRequired,
   handleErr: PropTypes.func.isRequired,
   removable: PropTypes.bool,

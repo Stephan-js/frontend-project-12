@@ -24,7 +24,7 @@ function ChatPage() {
   const [channels, setChanels] = useState(null);
   const [message, setMeseges] = useState([]);
 
-  const [channelMenu, setChanMenu] = useState(null);
+  const [channelMenu, setChanMenu] = useState({ type: null, id: null });
   const [problem, setProblem] = useState(null);
 
   const handleServerError = (err) => {
@@ -81,7 +81,7 @@ function ChatPage() {
     }));
 
     socket.on('disconnect', () => {
-      setProblem('internet');
+      setTimeout(() => setProblem('internet'), 2000);
     });
   }, []);
 
@@ -91,9 +91,10 @@ function ChatPage() {
 
       <ModalS
         handleServerError={handleServerError}
-        hide={() => setChanMenu(null)}
-        addOrRename={channelMenu}
-        show={!!channelMenu}
+        hide={() => setChanMenu({ type: null, id: null })}
+        addOrRename={channelMenu.type}
+        id={channelMenu.id}
+        show={!!channelMenu.type}
       />
       <nav className="navbar navbar-expand-lg navbar-light shadow-sm">
         {/* TODO: Add exit button or/and menue button */}
@@ -108,7 +109,7 @@ function ChatPage() {
               <div className="d-flex mt-md-1 justify-content-between mb-md-2 ps-2 ps-md-4 pe-md-2 p-4">
                 <b>Chaneles</b>
                 <button
-                  onClick={() => setChanMenu('add')}
+                  onClick={() => setChanMenu({ type: 'add', id: undefined })}
                   type="button"
                   className="p-0 ms-2 ms-md-0 text-primary btn btn-group-vertical"
                 >
@@ -121,6 +122,7 @@ function ChatPage() {
                     <Channel
                       {...info}
                       activeChannel={activeChannel}
+                      handleRename={(d) => setChanMenu(d)}
                       handleErr={(err) => handleServerError(err)}
                       setActive={(id) => setActive(id)}
                     />

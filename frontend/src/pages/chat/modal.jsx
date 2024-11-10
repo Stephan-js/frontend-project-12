@@ -14,9 +14,10 @@ class ModalS extends React.PureComponent {
       hide,
       show,
       addOrRename,
+      id,
     } = this.props;
 
-    const status = addOrRename !== 'login';
+    const rename = addOrRename !== 'add';
     return (
       <Modal
         className="rounded-3"
@@ -26,7 +27,7 @@ class ModalS extends React.PureComponent {
         onHide={hide}
       >
         <Modal.Header>
-          <Modal.Title id="modal-title">{status ? 'Rename channel' : 'Add chanel'}</Modal.Title>
+          <Modal.Title id="modal-title">{rename ? 'Rename channel' : 'Add chanel'}</Modal.Title>
         </Modal.Header>
         <Formik
           initialValues={{ channelName: '' }}
@@ -57,8 +58,8 @@ class ModalS extends React.PureComponent {
             resetForm();
             const channelData = { name: channelName };
 
-            if (!status) {
-              axios.post('/api/channels', channelData, {
+            if (rename) {
+              axios.patch(`/api/channels/${id}`, channelData, {
                 headers: {
                   Authorization: `Bearer ${localStorage.getItem('token')}`,
                 },
@@ -143,6 +144,7 @@ ModalS.propTypes = {
   show: PropTypes.bool.isRequired,
   hide: PropTypes.func.isRequired,
   handleServerError: PropTypes.func.isRequired,
+  id: PropTypes.string.isRequired,
 };
 
 export default ModalS;
