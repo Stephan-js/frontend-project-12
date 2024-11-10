@@ -12,6 +12,7 @@ class Channel extends React.PureComponent {
     this.handleClick = this.handleClick.bind(this);
     this.handleClickMenu = this.handleClickMenu.bind(this);
     this.handleDeleteChannel = this.handleDeleteChannel.bind(this);
+    this.handleRenameChannel = this.handleRenameChannel.bind(this);
     this.handleBlur = this.handleBlur.bind(this);
   }
 
@@ -30,6 +31,16 @@ class Channel extends React.PureComponent {
   }
 
   handleDeleteChannel(e) {
+    const { handleErr } = this.props;
+    const { id } = e.target;
+
+    axios.delete(`/api/channels/${id}`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+    })
+      .catch(handleErr);
+  }
+
+  handleRenameChannel(e) {
     const { handleErr } = this.props;
     const { id } = e.target;
 

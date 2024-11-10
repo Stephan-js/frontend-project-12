@@ -24,7 +24,7 @@ function ChatPage() {
   const [channels, setChanels] = useState(null);
   const [message, setMeseges] = useState([]);
 
-  const [addChannelShow, setShowChanMenu] = useState(false);
+  const [channelMShow, setShowChanMenu] = useState(0);
   const [connectProblemShow, setConnectionMenu] = useState(false);
   const [loginProblemShow, setReloginMenu] = useState(false);
 
@@ -100,6 +100,7 @@ function ChatPage() {
           </Button>
         </Modal.Footer>
       </Modal>
+
       <Modal
         className="rounded-3"
         centered
@@ -135,15 +136,16 @@ function ChatPage() {
           </Button>
         </Modal.Footer>
       </Modal>
+
       <Modal
         className="rounded-3"
         aria-labelledby="modal-title"
         centered
-        show={addChannelShow}
-        onHide={() => setShowChanMenu(false)}
+        show={channelMShow !== 0}
+        onHide={() => setShowChanMenu(0)}
       >
         <Modal.Header>
-          <Modal.Title id="modal-title">Add chanel</Modal.Title>
+          <Modal.Title id="modal-title">{channelMShow === 2 ? 'Rename channel' : 'Add chanel'}</Modal.Title>
         </Modal.Header>
         <Formik
           initialValues={{ channelName: '' }}
@@ -172,18 +174,31 @@ function ChatPage() {
           }}
           onSubmit={({ channelName }, { resetForm }) => {
             resetForm();
-            const channelData = { name: channelName, secret: false };
-            axios.post('/api/channels', channelData, {
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`,
-              },
-            })
-              .then(() => {
-                // Show uniq complite messege
-              })
-              .catch(handleServerError);
+            const channelData = { name: channelName };
 
-            setShowChanMenu(false);
+            if (channelMShow === 1) {
+              axios.post('/api/channels', channelData, {
+                headers: {
+                  Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+              })
+                .then(() => {
+                  // Show uniq complite messege
+                })
+                .catch(handleServerError);
+            } else {
+              axios.post('/api/channels', channelData, {
+                headers: {
+                  Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+              })
+                .then(() => {
+                  // Show uniq complite messege
+                })
+                .catch(handleServerError);
+            }
+
+            setShowChanMenu(0);
           }}
         >
           {({
@@ -218,7 +233,7 @@ function ChatPage() {
               </Modal.Body>
               <Modal.Footer>
                 <Button
-                  onClick={() => setShowChanMenu(false)}
+                  onClick={() => setShowChanMenu(0)}
                   type="button"
                   variant="secondary"
                   className="rounded-3"
@@ -252,7 +267,7 @@ function ChatPage() {
               <div className="d-flex mt-md-1 justify-content-between mb-md-2 ps-2 ps-md-4 pe-md-2 p-4">
                 <b>Chaneles</b>
                 <button
-                  onClick={() => setShowChanMenu(true)}
+                  onClick={() => setShowChanMenu(1)}
                   type="button"
                   className="p-0 ms-2 ms-md-0 text-primary btn btn-group-vertical"
                 >
