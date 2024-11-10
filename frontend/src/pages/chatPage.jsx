@@ -27,6 +27,7 @@ function ChatPage() {
   const [channelMenu, setChanMenu] = useState({ type: null, id: null });
   const [problem, setProblem] = useState(null);
 
+  // Functions
   const handleServerError = (err) => {
     if (err.status === 401) {
       setProblem('login');
@@ -46,6 +47,7 @@ function ChatPage() {
     }, 2000);
   };
 
+  // Get Data
   useEffect(() => {
     axios.get('/api/messages', {
       headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
@@ -68,6 +70,7 @@ function ChatPage() {
       .catch(handleServerError);
   }, []);
 
+  // Set listneres
   useEffect(() => {
     socket.on('newMessage', (respond) => setMeseges((prevMessages) => [...prevMessages, respond]));
     socket.on('newChannel', (newChannel) => setChanels((prevChannels) => [...prevChannels, newChannel]));
@@ -78,6 +81,10 @@ function ChatPage() {
         return pervActive;
       });
       return newChanels;
+    }));
+    socket.on('renameChannel', (changed) => setChanels((prevChannels) => {
+      const newChanels = prevChannels.filter(({ id }) => id !== changed.id);
+      return [...newChanels, changed];
     }));
 
     socket.on('disconnect', () => {
