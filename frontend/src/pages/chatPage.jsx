@@ -88,7 +88,7 @@ function ChatPage() {
     }));
 
     socket.on('disconnect', () => {
-      setTimeout(() => setProblem('internet'), 2000);
+      setTimeout(() => setProblem('internet'), 1500);
     });
   }, []);
 
