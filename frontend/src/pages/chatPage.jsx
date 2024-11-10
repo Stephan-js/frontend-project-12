@@ -1,7 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
 
 import React, { useState, useEffect } from 'react';
 import { Formik } from 'formik';
@@ -11,6 +9,8 @@ import axios from 'axios';
 
 import Channel from './chat/channel';
 import Message from './chat/messeg';
+import ModalMini from './chat/modalMini';
+import ModalS from './chat/modal';
 
 function ChatPage() {
   const socket = io({
@@ -24,15 +24,26 @@ function ChatPage() {
   const [channels, setChanels] = useState(null);
   const [message, setMeseges] = useState([]);
 
-  const [channelMShow, setShowChanMenu] = useState(0);
-  const [connectProblemShow, setConnectionMenu] = useState(false);
-  const [loginProblemShow, setReloginMenu] = useState(false);
+  const [channelMenu, setChanMenu] = useState(null);
+  const [problem, setProblem] = useState(null);
 
   const handleServerError = (err) => {
     if (err.status === 401) {
-      setReloginMenu(true);
+      setProblem('login');
       localStorage.removeItem('token');
     }
+  };
+
+  const reconnect = (e) => {
+    e.target.disabled = true;
+    socket.io.open((err) => {
+      if (!err) {
+        setProblem(null);
+      }
+    });
+    setTimeout(() => {
+      e.target.disabled = false;
+    }, 2000);
   };
 
   useEffect(() => {
@@ -70,190 +81,20 @@ function ChatPage() {
     }));
 
     socket.on('disconnect', () => {
-      setConnectionMenu(true);
+      setProblem('internet');
     });
   }, []);
 
   return (
     <div className="h-100 flex-column d-flex">
-      {/* Modals Part */}
-      <Modal
-        className="rounded-3"
-        centered
-        show={loginProblemShow}
-        backdrop="static"
-        keyboard={false}
-      >
-        <Modal.Header>
-          <Modal.Title>Oops!</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          It looks like you were signed out of your account. Please sign in again.
-        </Modal.Body>
-        <Modal.Footer>
-          <Button
-            className="rounded-3"
-            variant="dark"
-            onClick={() => { document.location.href = '/login'; }}
-          >
-            To Login
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      <ModalMini problem={problem} show={!!problem} reconnect={reconnect} />
 
-      <Modal
-        className="rounded-3"
-        centered
-        show={connectProblemShow}
-        onHide={() => setConnectionMenu(false)}
-        backdrop="static"
-        keyboard={false}
-      >
-        <Modal.Header>
-          <Modal.Title>Oops!</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          It looks like you lost connection with the server.
-          Please try reconnect or come back later!
-        </Modal.Body>
-        <Modal.Footer>
-          <Button
-            className="rounded-3"
-            variant="danger"
-            onClick={(e) => {
-              e.target.disabled = true;
-              socket.io.open((err) => {
-                if (!err) {
-                  setConnectionMenu(false);
-                }
-              });
-              setTimeout(() => {
-                e.target.disabled = false;
-              }, 2000);
-            }}
-          >
-            Reconnect
-          </Button>
-        </Modal.Footer>
-      </Modal>
-
-      <Modal
-        className="rounded-3"
-        aria-labelledby="modal-title"
-        centered
-        show={channelMShow !== 0}
-        onHide={() => setShowChanMenu(0)}
-      >
-        <Modal.Header>
-          <Modal.Title id="modal-title">{channelMShow === 2 ? 'Rename channel' : 'Add chanel'}</Modal.Title>
-        </Modal.Header>
-        <Formik
-          initialValues={{ channelName: '' }}
-          validate={({ channelName }) => {
-            const errors = {};
-            if (!channelName) {
-              errors.channelName = 'Requaired';
-              return errors;
-            } if (channelName.length < 3) {
-              errors.channelName = 'Need to be at least 3 characters';
-              return errors;
-            }
-            const eachWord = channelName.split(' ');
-
-            if (eachWord.length > 2) {
-              errors.channelName = 'Too long!';
-              return errors;
-            }
-            eachWord.forEach((word) => {
-              if (word.length > 9) {
-                errors.channelName = 'Too long!';
-              }
-            });
-
-            return errors;
-          }}
-          onSubmit={({ channelName }, { resetForm }) => {
-            resetForm();
-            const channelData = { name: channelName };
-
-            if (channelMShow === 1) {
-              axios.post('/api/channels', channelData, {
-                headers: {
-                  Authorization: `Bearer ${localStorage.getItem('token')}`,
-                },
-              })
-                .then(() => {
-                  // Show uniq complite messege
-                })
-                .catch(handleServerError);
-            } else {
-              axios.post('/api/channels', channelData, {
-                headers: {
-                  Authorization: `Bearer ${localStorage.getItem('token')}`,
-                },
-              })
-                .then(() => {
-                  // Show uniq complite messege
-                })
-                .catch(handleServerError);
-            }
-
-            setShowChanMenu(0);
-          }}
-        >
-          {({
-            values,
-            errors,
-            touched,
-            handleChange,
-            handleBlur,
-            handleSubmit,
-            isSubmitting,
-          }) => (
-            <Form noValidate onSubmit={handleSubmit}>
-              <Modal.Body>
-                <Form.Group className="form-floating">
-                  <Form.Control
-                    name="channelName"
-                    id="channelName-input"
-                    className="rounded-4"
-                    aria-describedby="channelName-label"
-                    placeholder="Channel Name"
-                    type="text"
-                    value={values.channelName}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    isInvalid={touched.channelName && !!errors.channelName}
-                  />
-                  <Form.Label id="channelName-label" htmlFor="channelName-input">Channel Name</Form.Label>
-                  <Form.Control.Feedback type="invalid" tooltip>
-                    {errors.channelName}
-                  </Form.Control.Feedback>
-                </Form.Group>
-              </Modal.Body>
-              <Modal.Footer>
-                <Button
-                  onClick={() => setShowChanMenu(0)}
-                  type="button"
-                  variant="secondary"
-                  className="rounded-3"
-                >
-                  Cancel
-                </Button>
-                <Button
-                  type="submit"
-                  onSubmit={isSubmitting}
-                  variant="dark"
-                  className="rounded-3"
-                >
-                  Save Channel
-                </Button>
-              </Modal.Footer>
-            </Form>
-          )}
-        </Formik>
-      </Modal>
-      {/* Actual chat part */}
+      <ModalS
+        handleServerError={handleServerError}
+        hide={() => setChanMenu(null)}
+        addOrRename={channelMenu}
+        show={!!channelMenu}
+      />
       <nav className="navbar navbar-expand-lg navbar-light shadow-sm">
         {/* TODO: Add exit button or/and menue button */}
         <div className="container">
@@ -267,7 +108,7 @@ function ChatPage() {
               <div className="d-flex mt-md-1 justify-content-between mb-md-2 ps-2 ps-md-4 pe-md-2 p-4">
                 <b>Chaneles</b>
                 <button
-                  onClick={() => setShowChanMenu(1)}
+                  onClick={() => setChanMenu('add')}
                   type="button"
                   className="p-0 ms-2 ms-md-0 text-primary btn btn-group-vertical"
                 >
