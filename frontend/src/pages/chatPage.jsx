@@ -6,6 +6,7 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import io from 'socket.io-client';
 import axios from 'axios';
+import Cookies from 'js-cookie';
 
 import Channel from './chat/channel';
 import Message from './chat/messeg';
@@ -64,8 +65,14 @@ function ChatPage() {
     })
       .then((resp) => {
         const { data } = resp;
+        const activeId = Cookies.get('active-channel');
         setChanels(data);
-        setActive(data[0].id);
+
+        if (data.filter(({ id }) => activeId === id)[0]) setActive(activeId);
+        else {
+          setActive(data[0].id);
+          Cookies.remove('active-channel');
+        }
       })
       .catch(handleServerError);
   }, []);

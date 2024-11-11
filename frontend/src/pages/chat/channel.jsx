@@ -5,6 +5,7 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import React from 'react';
 import axios from 'axios';
 import PropTypes from 'prop-types';
+import Cookies from 'js-cookie';
 
 class Channel extends React.PureComponent {
   constructor(props) {
@@ -18,13 +19,18 @@ class Channel extends React.PureComponent {
   handleClick(e) {
     const { setActive } = this.props;
     const { id } = e.target;
-    if (id) setActive(id);
+    if (id) {
+      setActive(id);
+      Cookies.set('active-channel', id, { sameSite: 'strict', expires: 31 });
+    }
   }
 
   handleDeleteChannel(e) {
     const { handleErr } = this.props;
     const { id } = e.target;
+    const activeId = Cookies.get('active-channel');
 
+    if (activeId === id) Cookies.remove('active-channel');
     axios.delete(`/api/channels/${id}`, {
       headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
     })
