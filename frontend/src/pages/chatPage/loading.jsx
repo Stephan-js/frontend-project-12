@@ -11,7 +11,7 @@ function Loading() {
           <button
             disabled
             type="button"
-            className="p-0 d-flex justify-content-center align-items-center ms-2 ms-md-0 text-primary btn"
+            className="p-0 d-flex border-0 justify-content-center align-items-center ms-2 ms-md-0 text-primary btn"
             style={{ width: '20px', height: '20px' }}
           >
             +

@@ -47,18 +47,18 @@ function ChatPage() {
 
   // Get Data
   useEffect(() => {
-    axios.get('/api/messages', {
-      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-    })
-      .then((resp) => {
-        if (resp.data) setMeseges(resp.data);
-      })
-      .catch(handleServerError);
-    axios.get('/api/channels', {
-      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-    })
-      .then((resp) => {
-        const { data } = resp;
+    axios.all([
+      axios.get('/api/messages', {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+      }),
+      axios.get('/api/channels', {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+      }),
+    ])
+      .then(axios.spread((dataM, dataC) => {
+        if (dataM.data) setMeseges(dataM.data);
+
+        const { data } = dataC;
         const activeId = Cookies.get('active-channel');
         setChanels(data);
 
@@ -67,7 +67,7 @@ function ChatPage() {
           setActive(data[0].id);
           Cookies.remove('active-channel');
         }
-      })
+      }))
       .catch(handleServerError);
   }, []);
 
@@ -108,6 +108,19 @@ function ChatPage() {
         {/* TODO: Add exit button or/and menue button */}
         <div className="container">
           <a className="navbar-brand" href="/">Chat App</a>
+          {channels ? (
+            <button
+              className="btn rounded-3 btn-outline-dark"
+              type="submit"
+              onClick={() => {
+                localStorage.removeItem('token');
+                document.location.href = '/login';
+              }}
+            >
+              Log Out
+            </button>
+          ) : null}
+
         </div>
       </nav>
       <div className="h-100 container-fluid my-4 my-md-5 d-flex">
