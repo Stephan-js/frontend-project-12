@@ -26,6 +26,18 @@ function ChatPage() {
   const [problem, setProblem] = useState(null);
 
   // Functions
+  const setUpListeners = () => {
+    socket.on('disconnect', () => {
+      setTimeout(() => setProblem('internet'), 1000);
+    });
+    socket.on('connect_error', () => {
+      setTimeout(() => {
+        setProblem('login');
+        localStorage.removeItem('token');
+      }, 500);
+    });
+  };
+
   const handleServerError = (err) => {
     if (err.status === 401) {
       setProblem('login');
@@ -34,25 +46,30 @@ function ChatPage() {
   };
 
   const reconnect = (e) => {
-    e.target.disabled = true;
     socket.io.open((err) => {
+      e.target.disabled = true;
       if (!err) {
         setProblem(null);
+        e.target.disabled = false;
+
+        setUpListeners();
+      } else {
+        setTimeout(() => {
+          e.target.disabled = false;
+        }, 2000);
       }
     });
-    setTimeout(() => {
-      e.target.disabled = false;
-    }, 2000);
   };
 
   // Get Data
   useEffect(() => {
+    const token = localStorage.getItem('token');
     axios.all([
       axios.get('/api/messages', {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+        headers: { Authorization: `Bearer ${token}` },
       }),
       axios.get('/api/channels', {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+        headers: { Authorization: `Bearer ${token}` },
       }),
     ])
       .then(axios.spread((dataM, dataC) => {
@@ -88,9 +105,7 @@ function ChatPage() {
       return [...newChanels, changed];
     }));
 
-    socket.on('disconnect', () => {
-      setTimeout(() => setProblem('internet'), 1500);
-    });
+    setUpListeners();
   }, []);
 
   return (
@@ -108,7 +123,7 @@ function ChatPage() {
         {/* TODO: Add exit button or/and menue button */}
         <div className="container">
           <a className="navbar-brand" href="/">Chat App</a>
-          {channels ? (
+          {localStorage.getItem('token') ? (
             <button
               className="btn rounded-3 btn-outline-dark"
               type="submit"
