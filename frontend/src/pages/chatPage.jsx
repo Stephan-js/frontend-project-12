@@ -57,9 +57,6 @@ function ChatPage() {
         if (resp.data) setMeseges(resp.data);
       })
       .catch(handleServerError);
-  }, []);
-
-  useEffect(() => {
     axios.get('/api/channels', {
       headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
     })
