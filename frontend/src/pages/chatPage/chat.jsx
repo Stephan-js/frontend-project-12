@@ -39,7 +39,7 @@ class Chat extends React.PureComponent {
                 <Channel
                   name={info.name}
                   id={info.id}
-                  remremovable={info.remremovable}
+                  removable={info.removable}
                   activeChannel={activeChannel}
                   handleRename={(d) => setChanMenu(d)}
                   handleErr={(err) => handleServerError(err)}
@@ -115,7 +115,7 @@ class Chat extends React.PureComponent {
                         onBlur={handleBlur}
                       />
                       <button
-                        className="btn btn-group-vertical"
+                        className="btn btn-group-vertical border-0"
                         type="submit"
                         onSubmit={isSubmitting}
                       >

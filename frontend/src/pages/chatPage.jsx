@@ -111,7 +111,7 @@ function ChatPage() {
         </div>
       </nav>
       <div className="h-100 container-fluid my-4 my-md-5 d-flex">
-        <div className="container h-100 overflow-hidden align-self-center chat rounded-4 shadow">
+        <div className="container overflow-hidden align-self-center chat rounded-4 shadow" style={{ height: '570px' }}>
           {channels ? (
             <Chat
               setChanMenu={setChanMenu}
