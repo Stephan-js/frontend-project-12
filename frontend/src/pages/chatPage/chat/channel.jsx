@@ -3,9 +3,9 @@ import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Dropdown from 'react-bootstrap/Dropdown';
 
 import React from 'react';
-import axios from 'axios';
 import PropTypes from 'prop-types';
 import Cookies from 'js-cookie';
+import axios from 'axios';
 
 class Channel extends React.PureComponent {
   constructor(props) {
