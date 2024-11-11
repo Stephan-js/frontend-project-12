@@ -8,6 +8,7 @@ import Cookies from 'js-cookie';
 import ModalMini from './chatPage/modalMini';
 import ModalS from './chatPage/modal';
 import Chat from './chatPage/chat';
+import Loading from './chatPage/loading';
 
 function ChatPage() {
   const socket = io({
@@ -110,14 +111,18 @@ function ChatPage() {
         </div>
       </nav>
       <div className="h-100 container-fluid my-4 my-md-5 d-flex">
-        <Chat
-          setChanMenu={setChanMenu}
-          handleServerError={handleServerError}
-          setActive={setActive}
-          activeChannel={activeChannel}
-          channels={channels}
-          messages={messages}
-        />
+        <div className="container h-100 overflow-hidden align-self-center chat rounded-4 shadow">
+          {channels ? (
+            <Chat
+              setChanMenu={setChanMenu}
+              handleServerError={handleServerError}
+              setActive={setActive}
+              activeChannel={activeChannel}
+              channels={channels}
+              messages={messages}
+            />
+          ) : <Loading />}
+        </div>
       </div>
     </div>
   );
