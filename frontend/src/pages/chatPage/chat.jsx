@@ -19,13 +19,15 @@ class Chat extends React.PureComponent {
       channels,
       messages,
     } = this.props;
+
+    const activeChanMesseges = messages.filter(({ channelId }) => channelId === activeChannel);
     return (
       <div className="d-flex h-100 bg-white flex-column row flex-md-row">
         <div className="col-4 col-md-2 px-md-0 border-bottom border-md-end-0 border-md-right bg-light d-flex flex-row flex-md-column channels">
           <div className="d-flex mt-md-1 justify-content-between mb-md-2 ps-2 ps-md-4 pe-md-2 p-4">
             <b>Chaneles</b>
             <button
-              onClick={() => setChanMenu({ type: 'add', id: undefined })}
+              onClick={() => setChanMenu({ type: 'add', id: undefined, show: true })}
               type="button"
               className="p-0 d-flex justify-content-center align-items-center ms-2 ms-md-0 text-primary btn"
               style={{ width: '20px', height: '20px' }}
@@ -60,21 +62,18 @@ class Chat extends React.PureComponent {
               <span className="text-muted">
                 Meseges:
                 {' '}
-                {messages ? messages
-                  .filter(({ channelId }) => channelId === activeChannel)
-                  .length : '???'}
+                {activeChanMesseges.length}
               </span>
             </div>
             <div className="overflow-auto px-5 ">
-              {messages ? messages
-                .filter(({ channelId }) => channelId === activeChannel)
+              {activeChanMesseges
                 .map((info) => (
                   <Message
                     username={info.username}
                     id={info.id}
                     messege={info.body}
                   />
-                )) : null}
+                ))}
             </div>
             <div className="mt-auto px-5 py-3">
               <Formik

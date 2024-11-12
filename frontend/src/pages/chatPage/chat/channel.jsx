@@ -41,7 +41,7 @@ class Channel extends React.PureComponent {
     const { handleRename } = this.props;
     const { id } = e.target;
 
-    handleRename({ type: 'rename', id });
+    handleRename({ type: 'rename', id, show: true });
   }
 
   render() {

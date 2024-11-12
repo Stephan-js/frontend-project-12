@@ -26,6 +26,9 @@ function Loading() {
                 Loading...
               </b>
             </p>
+            <span className="text-muted">
+              Meseges: ???
+            </span>
           </div>
           <div className="h-100">
             <div className="d-flex align-items-center justify-content-center w-100 h-100">

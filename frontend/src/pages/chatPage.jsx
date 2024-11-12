@@ -20,9 +20,9 @@ function ChatPage() {
 
   const [activeChannel, setActive] = useState(null);
   const [channels, setChanels] = useState(null);
-  const [messages, setMeseges] = useState([]);
+  const [messages, setMeseges] = useState(null);
 
-  const [channelMenu, setChanMenu] = useState({ type: null, id: null });
+  const [channelMenu, setChanMenu] = useState({ type: null, id: null, show: false });
   const [problem, setProblem] = useState(null);
 
   // Functions
@@ -63,27 +63,21 @@ function ChatPage() {
 
   // Get Data
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const options = {
+      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+    };
     axios.all([
-      axios.get('/api/messages', {
-        headers: { Authorization: `Bearer ${token}` },
-      }),
-      axios.get('/api/channels', {
-        headers: { Authorization: `Bearer ${token}` },
-      }),
+      axios.get('/api/messages', options),
+      axios.get('/api/channels', options),
     ])
-      .then(axios.spread((dataM, dataC) => {
-        if (dataM.data) setMeseges(dataM.data);
+      .then(axios.spread((mess, chan) => {
+        setMeseges(mess.data ?? []);
 
-        const { data } = dataC;
+        const dataChan = chan.data;
         const activeId = Cookies.get('active-channel');
-        setChanels(data);
-
-        if (data.filter(({ id }) => activeId === id)[0]) setActive(activeId);
-        else {
-          setActive(data[0].id);
-          Cookies.remove('active-channel');
-        }
+        if (dataChan.filter(({ id }) => activeId === id)[0]) setActive(activeId);
+        else setActive(dataChan[0].id);
+        setChanels(dataChan);
       }))
       .catch(handleServerError);
   }, []);
@@ -114,13 +108,12 @@ function ChatPage() {
 
       <ModalS
         handleServerError={handleServerError}
-        hide={() => setChanMenu({ type: null, id: null })}
+        hide={() => setChanMenu({ type: null, id: null, show: false })}
         addOrRename={channelMenu.type}
         id={channelMenu.id}
-        show={!!channelMenu.type}
+        show={channelMenu.show}
       />
       <nav className="navbar navbar-expand-lg navbar-light shadow-sm">
-        {/* TODO: Add exit button or/and menue button */}
         <div className="container">
           <a className="navbar-brand" href="/">Chat App</a>
           {localStorage.getItem('token') ? (
