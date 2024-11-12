@@ -3,6 +3,7 @@ import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Dropdown from 'react-bootstrap/Dropdown';
 
 import React from 'react';
+import { toast } from 'react-toastify';
 import PropTypes from 'prop-types';
 import Cookies from 'js-cookie';
 import axios from 'axios';
@@ -34,6 +35,9 @@ class Channel extends React.PureComponent {
     axios.delete(`/api/channels/${id}`, {
       headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
     })
+      .then(() => {
+        toast.success('Channel has been deleted!');
+      })
       .catch(handleErr);
   }
 

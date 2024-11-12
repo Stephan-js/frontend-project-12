@@ -7,6 +7,7 @@ import {
 } from 'react-router-dom';
 
 import './scss/styleLogin.scss';
+import 'react-toastify/dist/ReactToastify.css';
 
 import Login from './pages/login';
 import Page404 from './pages/page404';

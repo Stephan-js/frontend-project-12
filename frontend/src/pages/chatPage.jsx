@@ -1,5 +1,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useState, useEffect } from 'react';
+import { ToastContainer } from 'react-toastify';
 
 import io from 'socket.io-client';
 import axios from 'axios';
@@ -104,6 +105,7 @@ function ChatPage() {
 
   return (
     <div className="h-100 flex-column d-flex">
+      <ToastContainer stacked />
       <ModalMini problem={problem} show={!!problem} reconnect={reconnect} />
 
       <ModalS
