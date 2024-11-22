@@ -4,7 +4,7 @@ TODO: Make ReadMe file
 
 TODO: need fixs
 
-TODO: add setting menu
+TODO: add setting
 
 ---
 
