@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import React, { useState, useEffect } from 'react';
 import { ToastContainer } from 'react-toastify';
 
@@ -26,7 +25,13 @@ function ChatPage() {
   const [channelMenu, setChanMenu] = useState({ type: null, id: null, show: false });
   const [problem, setProblem] = useState(null);
 
-  // Functions
+  const handleServerError = (err) => {
+    if (err.status === 401) {
+      setProblem('login');
+      localStorage.removeItem('token');
+    }
+  };
+
   const setUpListeners = () => {
     socket.on('disconnect', () => {
       setTimeout(() => setProblem('internet'), 1000);
@@ -37,13 +42,6 @@ function ChatPage() {
         localStorage.removeItem('token');
       }, 500);
     });
-  };
-
-  const handleServerError = (err) => {
-    if (err.status === 401) {
-      setProblem('login');
-      localStorage.removeItem('token');
-    }
   };
 
   const reconnect = (e) => {
@@ -62,14 +60,13 @@ function ChatPage() {
     });
   };
 
-  // Get Data
   useEffect(() => {
-    const options = {
+    const token = {
       headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
     };
     axios.all([
-      axios.get('/api/messages', options),
-      axios.get('/api/channels', options),
+      axios.get('/api/messages', token),
+      axios.get('/api/channels', token),
     ])
       .then(axios.spread((mess, chan) => {
         setMeseges(mess.data ?? []);
@@ -83,7 +80,6 @@ function ChatPage() {
       .catch(handleServerError);
   }, []);
 
-  // Set listneres
   useEffect(() => {
     socket.on('newMessage', (respond) => setMeseges((prevMessages) => [...prevMessages, respond]));
     socket.on('newChannel', (newChannel) => setChanels((prevChannels) => [...prevChannels, newChannel]));
