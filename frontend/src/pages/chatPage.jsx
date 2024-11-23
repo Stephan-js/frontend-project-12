@@ -5,7 +5,7 @@ import io from 'socket.io-client';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
-import ModalMini from './chatPage/modalMini';
+import ModalMini from './chatPage/modalProblems';
 import ModalS from './chatPage/modal';
 import Chat from './chatPage/chat';
 import Loading from './chatPage/loading';
