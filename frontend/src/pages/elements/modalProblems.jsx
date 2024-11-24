@@ -4,7 +4,7 @@ import Modal from 'react-bootstrap/Modal';
 import React from 'react';
 import PropTypes from 'prop-types';
 
-class ModalMini extends React.PureComponent {
+class ModalProblem extends React.PureComponent {
   render() {
     const { problem, show, reconnect } = this.props;
 
@@ -38,10 +38,10 @@ class ModalMini extends React.PureComponent {
   }
 }
 
-ModalMini.propTypes = {
+ModalProblem.propTypes = {
   problem: PropTypes.string.isRequired,
   show: PropTypes.bool.isRequired,
   reconnect: PropTypes.func.isRequired,
 };
 
-export default ModalMini;
+export default ModalProblem;

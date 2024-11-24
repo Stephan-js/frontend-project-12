@@ -6,8 +6,8 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
 
-import Channel from './chat/channel';
-import Message from './chat/messeg';
+import Channel from '../elements/channel';
+import Message from '../elements/messeg';
 
 class Chat extends React.PureComponent {
   render() {

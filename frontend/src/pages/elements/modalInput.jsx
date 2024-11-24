@@ -8,17 +8,16 @@ import PropTypes from 'prop-types';
 import { Formik } from 'formik';
 import axios from 'axios';
 
-class ModalS extends React.PureComponent {
+class ModalInput extends React.PureComponent {
   render() {
     const {
       handleServerError,
       hide,
       show,
-      addOrRename,
+      type,
       id,
     } = this.props;
 
-    const rename = addOrRename !== 'add';
     return (
       <Modal
         className="rounded-3"
@@ -28,7 +27,7 @@ class ModalS extends React.PureComponent {
         onHide={hide}
       >
         <Modal.Header>
-          <Modal.Title id="modal-title">{rename ? 'Rename channel' : 'Add chanel'}</Modal.Title>
+          <Modal.Title id="modal-title">{type !== 'add' ? 'Rename channel' : 'Add chanel'}</Modal.Title>
         </Modal.Header>
         <Formik
           initialValues={{ channelName: '' }}
@@ -59,7 +58,7 @@ class ModalS extends React.PureComponent {
             resetForm();
             const channelData = { name: channelName };
 
-            if (rename) {
+            if (type !== 'add') {
               axios.patch(`/api/channels/${id}`, channelData, {
                 headers: {
                   Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -140,12 +139,12 @@ class ModalS extends React.PureComponent {
   }
 }
 
-ModalS.propTypes = {
-  addOrRename: PropTypes.string.isRequired,
+ModalInput.propTypes = {
+  type: PropTypes.string.isRequired,
   show: PropTypes.bool.isRequired,
   hide: PropTypes.func.isRequired,
   handleServerError: PropTypes.func.isRequired,
   id: PropTypes.string.isRequired,
 };
 
-export default ModalS;
+export default ModalInput;

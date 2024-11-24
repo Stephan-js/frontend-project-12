@@ -5,8 +5,8 @@ import io from 'socket.io-client';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
-import ModalMini from './chatPage/modalProblems';
-import ModalS from './chatPage/modal';
+import ModalProblem from './elements/modalProblems';
+import ModalInput from './elements/modalInput';
 import Chat from './chatPage/chat';
 import Loading from './chatPage/loading';
 
@@ -32,7 +32,7 @@ function ChatPage() {
     }
   };
 
-  const setUpListeners = () => {
+  const setUpErrListeners = () => {
     socket.on('disconnect', () => {
       setTimeout(() => setProblem('internet'), 1000);
     });
@@ -51,7 +51,7 @@ function ChatPage() {
         setProblem(null);
         e.target.disabled = false;
 
-        setUpListeners();
+        setUpErrListeners();
       } else {
         setTimeout(() => {
           e.target.disabled = false;
@@ -96,18 +96,18 @@ function ChatPage() {
       return [...newChanels, changed];
     }));
 
-    setUpListeners();
+    setUpErrListeners();
   }, []);
 
   return (
     <div className="h-100 flex-column d-flex">
       <ToastContainer stacked />
-      <ModalMini problem={problem} show={!!problem} reconnect={reconnect} />
 
-      <ModalS
+      <ModalProblem problem={problem} show={!!problem} reconnect={reconnect} />
+      <ModalInput
         handleServerError={handleServerError}
         hide={() => setChanMenu({ type: null, id: null, show: false })}
-        addOrRename={channelMenu.type}
+        type={channelMenu.type}
         id={channelMenu.id}
         show={channelMenu.show}
       />

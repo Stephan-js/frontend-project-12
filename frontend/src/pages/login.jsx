@@ -6,7 +6,7 @@ import axios from 'axios';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 
-import image from '../img/login.jpg';
+import image from '../../public/img/login.jpg';
 
 function Login() {
   return (
