@@ -1,9 +1,9 @@
 import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
+// import Dropdown from 'react-bootstrap/Dropdown';
 
 import React from 'react';
-// eslint-disable-next-line no-unused-vars
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 
 class NavbarMenu extends React.PureComponent {
   render() {
@@ -11,23 +11,27 @@ class NavbarMenu extends React.PureComponent {
       <Navbar expand="lg" className="shadow-sm">
         <Container>
           <Navbar.Brand href="/">Chat App</Navbar.Brand>
-          {/* <NavDropdown
-            title="Settings"
-            className="rounded-3"
-            id="collapsible-nav-dropdown"
-            menuRole={{
-              position: 'absolute',
-              'min-width': '0px',
-              'max-width': '100px',
-              inset: '0px 0px auto auto',
-              transform: 'translate(0px, 40px)',
-            }}
-          >
-            <NavDropdown.Item href="#action/3.1">Log Out</NavDropdown.Item>
-            <NavDropdown.Divider />
-            <NavDropdown.Item href="#action/3.2">Rename</NavDropdown.Item>
-            <NavDropdown.Item href="#action/3.3">Delete</NavDropdown.Item>
-          </NavDropdown> */}
+          {/* <Dropdown>
+            <Dropdown.Toggle variant="none" id="dropdown-basic">
+              Settings
+            </Dropdown.Toggle>
+
+            <Dropdown.Menu
+              className="rounded-3"
+              style={{
+                position: 'absolute',
+                'min-width': '0px',
+                width: '93px',
+                inset: '0px 2px auto auto',
+                transform: 'translate(0px, 40px)',
+              }}
+            >
+              <Dropdown.Item href="#/action-1">Log Out</Dropdown.Item>
+              <Dropdown.Divider />
+              <Dropdown.Item href="#/action-2">Rename</Dropdown.Item>
+              <Dropdown.Item href="#/action-3">Delete</Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown> */}
         </Container>
       </Navbar>
     );
