@@ -6,7 +6,7 @@ import {
   Navigate,
 } from 'react-router-dom';
 
-import './scss/styleLogin.scss';
+import './scss/style.scss';
 import 'react-toastify/dist/ReactToastify.css';
 
 import Login from './pages/login';
