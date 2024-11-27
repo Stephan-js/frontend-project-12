@@ -6,14 +6,12 @@ import axios from 'axios';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 
+import NavbarMenu from './elements/navbar';
+
 function Register() {
   return (
     <div className="h-100 d-flex flex-column">
-      <nav className="navbar navbar-expand-lg navbar-light shadow-sm">
-        <div className="container">
-          <a className="navbar-brand" href="/">Chat App</a>
-        </div>
-      </nav>
+      <NavbarMenu />
       <div className="container-fluid h-100">
         <div className="row align-items-center justify-content-center h-100">
           <div className="col-11 col-sm-10 col-md-8 col-xl-7 col-xxl-6">

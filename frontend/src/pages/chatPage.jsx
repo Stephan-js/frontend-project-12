@@ -10,6 +10,8 @@ import ModalInput from './elements/modalInput';
 import Chat from './chatPage/chat';
 import Loading from './chatPage/loading';
 
+import NavbarMenu from './elements/navbar';
+
 function ChatPage() {
   const socket = io({
     reconnection: false,
@@ -111,24 +113,7 @@ function ChatPage() {
         id={channelMenu.id}
         show={channelMenu.show}
       />
-      <nav className="navbar navbar-expand-lg navbar-light shadow-sm">
-        <div className="container">
-          <a className="navbar-brand" href="/">Chat App</a>
-          {localStorage.getItem('token') ? (
-            <button
-              className="btn rounded-3 btn-outline-dark"
-              type="submit"
-              onClick={() => {
-                localStorage.removeItem('token');
-                document.location.href = '/login';
-              }}
-            >
-              Log Out
-            </button>
-          ) : null}
-
-        </div>
-      </nav>
+      <NavbarMenu />
       <div className="h-100 container-fluid my-4 my-md-5 d-flex">
         <div className="container overflow-hidden align-self-center chat rounded-4 shadow" style={{ height: '570px' }}>
           {channels ? (
