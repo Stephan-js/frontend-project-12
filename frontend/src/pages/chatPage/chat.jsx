@@ -1,13 +1,13 @@
-import Form from 'react-bootstrap/Form';
+import Form from "react-bootstrap/Form";
 
-import React from 'react';
-import PropTypes from 'prop-types';
-import { Formik } from 'formik';
-import * as Yup from 'yup';
-import axios from 'axios';
+import React from "react";
+import PropTypes from "prop-types";
+import { Formik } from "formik";
+import * as Yup from "yup";
+import axios from "axios";
 
-import Channel from '../elements/channel';
-import Message from '../elements/messeg';
+import Channel from "../elements/channel";
+import Message from "../elements/messeg";
 
 class Chat extends React.PureComponent {
   render() {
@@ -20,34 +20,40 @@ class Chat extends React.PureComponent {
       messages,
     } = this.props;
 
-    const activeChanMesseges = messages.filter(({ channelId }) => channelId === activeChannel);
+    const activeChanMesseges = messages.filter(
+      ({ channelId }) => channelId === activeChannel,
+    );
     return (
       <div className="d-flex h-100 bg-white flex-column row flex-md-row">
         <div className="col-4 col-md-2 px-md-0 border-bottom border-md-end-0 border-md-right bg-light d-flex flex-row flex-md-column channels">
           <div className="d-flex mt-md-1 justify-content-between mb-md-2 ps-2 ps-md-4 pe-md-2 p-4">
             <b>Chaneles</b>
             <button
-              onClick={() => setChanMenu({ type: 'add', id: undefined, show: true })}
+              onClick={() =>
+                setChanMenu({ type: "add", id: undefined, show: true })
+              }
               type="button"
               className="p-0 d-flex justify-content-center align-items-center ms-2 ms-md-0 text-primary btn"
-              style={{ width: '20px', height: '20px' }}
+              style={{ width: "20px", height: "20px" }}
             >
               +
             </button>
           </div>
           <div className="flex-nowrap d-flex flex-row flex-md-column px-2 mt-3 mt-md-0 mb-3 nav-pills overflow-auto h-75 w-100 d-block">
-            {channels ? channels
-              .map((info) => (
-                <Channel
-                  name={info.name}
-                  id={info.id}
-                  removable={info.removable}
-                  activeChannel={activeChannel}
-                  handleRename={(d) => setChanMenu(d)}
-                  handleErr={(err) => handleServerError(err)}
-                  setActive={(id) => setActive(id)}
-                />
-              )) : null}
+            {channels
+              ? channels.map((info) => (
+                  <Channel
+                    key={info.id}
+                    name={info.name}
+                    id={info.id}
+                    removable={info.removable}
+                    activeChannel={activeChannel}
+                    handleRename={(d) => setChanMenu(d)}
+                    handleErr={(err) => handleServerError(err)}
+                    setActive={(id) => setActive(id)}
+                  />
+                ))
+              : null}
           </div>
         </div>
         <div className="col p-0 messeges">
@@ -55,42 +61,45 @@ class Chat extends React.PureComponent {
             <div className="bg-light mb-4 p-3 shadow-sm small">
               <p className="mb-0">
                 <b>
-                  {channels ? channels
-                    .filter(({ id }) => id === activeChannel)[0].name : null}
+                  {channels
+                    ? channels.filter(({ id }) => id === activeChannel)[0].name
+                    : null}
                 </b>
               </p>
               <span className="text-muted">
-                Meseges:
-                {' '}
-                {activeChanMesseges.length}
+                Meseges: {activeChanMesseges.length}
               </span>
             </div>
             <div className="overflow-auto px-5 ">
-              {activeChanMesseges
-                .map((info) => (
-                  <Message
-                    username={info.username}
-                    id={info.id}
-                    messege={info.body}
-                  />
-                ))}
+              {activeChanMesseges.map((info) => (
+                <Message
+                  key={info.id}
+                  username={info.username}
+                  id={info.id}
+                  messege={info.body}
+                />
+              ))}
             </div>
             <div className="mt-auto px-5 py-3">
               <Formik
-                initialValues={{ messege: '' }}
+                initialValues={{ messege: "" }}
                 validationSchema={Yup.object({
                   messege: Yup.string()
-                    .max(160, 'Must be 160 characters or less!')
-                    .required('Required!'),
+                    .max(160, "Must be 160 characters or less!")
+                    .required("Required!"),
                 })}
                 onSubmit={({ messege }, { resetForm }) => {
                   resetForm();
-                  const messegeData = { body: messege, channelId: activeChannel };
-                  axios.post('/api/messages', messegeData, {
-                    headers: {
-                      Authorization: `Bearer ${localStorage.getItem('token')}`,
-                    },
-                  })
+                  const messegeData = {
+                    body: messege,
+                    channelId: activeChannel,
+                  };
+                  axios
+                    .post("/api/messages", messegeData, {
+                      headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                      },
+                    })
                     .catch(handleServerError);
                 }}
               >
@@ -101,7 +110,10 @@ class Chat extends React.PureComponent {
                   handleSubmit,
                   isSubmitting,
                 }) => (
-                  <Form className="py-1 border rounded-4" onSubmit={handleSubmit}>
+                  <Form
+                    className="py-1 border rounded-4"
+                    onSubmit={handleSubmit}
+                  >
                     <Form.Group className="p-1 input-group">
                       <Form.Control
                         required

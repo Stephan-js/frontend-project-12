@@ -1,14 +1,14 @@
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
 
-import React from 'react';
-import axios from 'axios';
-import { Formik } from 'formik';
-import * as Yup from 'yup';
+import React from "react";
+import axios from "axios";
+import { Formik } from "formik";
+import * as Yup from "yup";
 
-import image from '../img/login.jpg';
+import image from "../img/login.jpg";
 
-import NavbarMenu from './elements/navbar';
+import NavbarMenu from "./elements/navbar";
 
 function Login() {
   return (
@@ -20,29 +20,51 @@ function Login() {
             <div className="card border rounded-5 border-bottom-0 shadow-sm my-4">
               <div className="row card-body p-5">
                 <div className="col-12 col-md-6 d-flex align-items-center justify-content-center">
-                  <img src={image} className="rounded" alt="Login-Image" height={200} width={200} />
+                  <img
+                    src={image}
+                    className="rounded"
+                    alt="Login-Image"
+                    height={200}
+                    width={200}
+                  />
                 </div>
                 <Formik
-                  initialValues={{ username: '', password: '' }}
+                  initialValues={{ username: "", password: "" }}
                   validationSchema={Yup.object({
                     username: Yup.string()
-                      .max(20, 'Must be 20 characters or less!')
-                      .matches(/^[a-zA-Z0-9-_ ]*$/, 'Please, enter valid characters.'),
+                      .max(20, "Must be 20 characters or less!")
+                      .matches(
+                        /^[a-zA-Z0-9-_ ]*$/,
+                        "Please, enter valid characters.",
+                      ),
                     password: Yup.string()
-                      .max(20, 'Must be 20 characters or less!')
-                      .matches(/^[a-zA-Z0-9!?,._-]*$/, 'Please, enter valid characters.'),
+                      .max(20, "Must be 20 characters or less!")
+                      .matches(
+                        /^[a-zA-Z0-9!?,._-]*$/,
+                        "Please, enter valid characters.",
+                      ),
                   })}
                   onSubmit={(values, { setErrors }) => {
-                    axios.post('/api/account/login', { username: values.username, password: values.password })
+                    axios
+                      .post("/api/account/login", {
+                        username: values.username,
+                        password: values.password,
+                      })
                       .then((res) => {
-                        localStorage.setItem('token', res.data.token);
-                        document.location.href = '/';
+                        localStorage.setItem("token", res.data.token);
+                        document.location.href = "/";
                       })
                       .catch((err) => {
                         if (err.status === 401) {
-                          setErrors({ username: true, password: 'Wrong password or username.' });
+                          setErrors({
+                            username: true,
+                            password: "Wrong password or username.",
+                          });
                         } else {
-                          setErrors({ username: true, password: 'Sorry, unknown error.' });
+                          setErrors({
+                            username: true,
+                            password: "Sorry, unknown error.",
+                          });
                         }
                       });
                   }}
@@ -56,7 +78,11 @@ function Login() {
                     handleSubmit,
                     isSubmitting,
                   }) => (
-                    <Form noValidate className="col-12 col-md-6 mt-3 mt-md-0" onSubmit={handleSubmit}>
+                    <Form
+                      noValidate
+                      className="col-12 col-md-6 mt-3 mt-md-0"
+                      onSubmit={handleSubmit}
+                    >
                       <h1 className="text-center mb-4">Login</h1>
                       <Form.Group className="form-floating mb-3">
                         <Form.Control
@@ -72,8 +98,15 @@ function Login() {
                           onBlur={handleBlur}
                           isInvalid={touched.username && !!errors.username}
                         />
-                        <Form.Label id="username-label" htmlFor="username-input">Username</Form.Label>
-                        <Form.Control.Feedback type="invalid">{errors.username}</Form.Control.Feedback>
+                        <Form.Label
+                          id="username-label"
+                          htmlFor="username-input"
+                        >
+                          Username
+                        </Form.Label>
+                        <Form.Control.Feedback type="invalid">
+                          {errors.username}
+                        </Form.Control.Feedback>
                       </Form.Group>
                       <Form.Group className="form-floating mb-4">
                         <Form.Control
@@ -89,8 +122,15 @@ function Login() {
                           onBlur={handleBlur}
                           isInvalid={touched.password && !!errors.password}
                         />
-                        <Form.Label id="password-label" htmlFor="password-input">Password</Form.Label>
-                        <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>
+                        <Form.Label
+                          id="password-label"
+                          htmlFor="password-input"
+                        >
+                          Password
+                        </Form.Label>
+                        <Form.Control.Feedback type="invalid">
+                          {errors.password}
+                        </Form.Control.Feedback>
                       </Form.Group>
                       <Button
                         onSubmit={isSubmitting}

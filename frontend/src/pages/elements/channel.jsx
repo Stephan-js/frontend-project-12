@@ -1,12 +1,12 @@
-import Button from 'react-bootstrap/Button';
-import ButtonGroup from 'react-bootstrap/ButtonGroup';
-import Dropdown from 'react-bootstrap/Dropdown';
+import Button from "react-bootstrap/Button";
+import ButtonGroup from "react-bootstrap/ButtonGroup";
+import Dropdown from "react-bootstrap/Dropdown";
 
-import React from 'react';
-import { toast } from 'react-toastify';
-import PropTypes from 'prop-types';
-import Cookies from 'js-cookie';
-import axios from 'axios';
+import React from "react";
+import { toast } from "react-toastify";
+import PropTypes from "prop-types";
+import Cookies from "js-cookie";
+import axios from "axios";
 
 class Channel extends React.PureComponent {
   constructor(props) {
@@ -22,21 +22,22 @@ class Channel extends React.PureComponent {
     const { id } = e.target;
     if (id) {
       setActive(id);
-      Cookies.set('active-channel', id, { sameSite: 'strict', expires: 31 });
+      Cookies.set("active-channel", id, { sameSite: "strict", expires: 31 });
     }
   }
 
   handleDeleteChannel(e) {
     const { handleErr } = this.props;
     const { id } = e.target;
-    const activeId = Cookies.get('active-channel');
+    const activeId = Cookies.get("active-channel");
 
-    if (activeId === id) Cookies.remove('active-channel');
-    axios.delete(`/api/channels/${id}`, {
-      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-    })
+    if (activeId === id) Cookies.remove("active-channel");
+    axios
+      .delete(`/api/channels/${id}`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      })
       .then(() => {
-        toast.success('Channel has been deleted!');
+        toast.success("Channel has been deleted!");
       })
       .catch(handleErr);
   }
@@ -45,22 +46,20 @@ class Channel extends React.PureComponent {
     const { handleRename } = this.props;
     const { id } = e.target;
 
-    handleRename({ type: 'rename', id, show: true });
+    handleRename({ type: "rename", id, show: true });
   }
 
   render() {
-    const {
-      name,
-      id,
-      removable,
-      activeChannel,
-    } = this.props;
+    const { name, id, removable, activeChannel } = this.props;
 
-    const variant = activeChannel === id ? 'secondary' : 'none';
+    const variant = activeChannel === id ? "secondary" : "none";
     const tooSmall = window.innerWidth < 768;
     if (!removable || tooSmall) {
       return (
-        <div className="nav-item w-md-100 me-1 me-md-0 mb-md-1" style={{ 'min-width': 'fit-content' }}>
+        <div
+          className="nav-item w-md-100 me-1 me-md-0 mb-md-1"
+          style={{ "min-width": "fit-content" }}
+        >
           <Button
             id={id}
             variant={variant}
@@ -76,7 +75,10 @@ class Channel extends React.PureComponent {
     }
 
     return (
-      <div className="nav-item w-md-100 me-1 me-md-0 mb-md-1" style={{ 'min-width': 'fit-content' }}>
+      <div
+        className="nav-item w-md-100 me-1 me-md-0 mb-md-1"
+        style={{ "min-width": "fit-content" }}
+      >
         <Dropdown as={ButtonGroup} className="w-100">
           <Button
             id={id}
@@ -99,15 +101,19 @@ class Channel extends React.PureComponent {
           <Dropdown.Menu
             className="rounded-3"
             style={{
-              position: 'absolute',
-              'min-width': '0px',
-              'max-width': '100px',
-              inset: '0px 0px auto auto',
-              transform: 'translate(0px, 40px)',
+              position: "absolute",
+              "min-width": "0px",
+              "max-width": "100px",
+              inset: "0px 0px auto auto",
+              transform: "translate(0px, 40px)",
             }}
           >
-            <Dropdown.Item id={id} onClick={this.handleRenameChannel} href="#">Rename</Dropdown.Item>
-            <Dropdown.Item id={id} onClick={this.handleDeleteChannel} href="#">Delete</Dropdown.Item>
+            <Dropdown.Item id={id} onClick={this.handleRenameChannel} href="#">
+              Rename
+            </Dropdown.Item>
+            <Dropdown.Item id={id} onClick={this.handleDeleteChannel} href="#">
+              Delete
+            </Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
       </div>

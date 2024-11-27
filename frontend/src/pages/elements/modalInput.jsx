@@ -1,22 +1,16 @@
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
 
-import React from 'react';
-import { toast } from 'react-toastify';
-import PropTypes from 'prop-types';
-import { Formik } from 'formik';
-import axios from 'axios';
+import React from "react";
+import { toast } from "react-toastify";
+import PropTypes from "prop-types";
+import { Formik } from "formik";
+import axios from "axios";
 
 class ModalInput extends React.PureComponent {
   render() {
-    const {
-      handleServerError,
-      hide,
-      show,
-      type,
-      id,
-    } = this.props;
+    const { handleServerError, hide, show, type, id } = this.props;
 
     return (
       <Modal
@@ -27,28 +21,31 @@ class ModalInput extends React.PureComponent {
         onHide={hide}
       >
         <Modal.Header>
-          <Modal.Title id="modal-title">{type !== 'add' ? 'Rename channel' : 'Add chanel'}</Modal.Title>
+          <Modal.Title id="modal-title">
+            {type !== "add" ? "Rename channel" : "Add chanel"}
+          </Modal.Title>
         </Modal.Header>
         <Formik
-          initialValues={{ channelName: '' }}
+          initialValues={{ channelName: "" }}
           validate={({ channelName }) => {
             const errors = {};
             if (!channelName) {
-              errors.channelName = 'Requaired';
-              return errors;
-            } if (channelName.length < 3) {
-              errors.channelName = 'Need to be at least 3 characters';
+              errors.channelName = "Requaired";
               return errors;
             }
-            const eachWord = channelName.split(' ');
+            if (channelName.length < 3) {
+              errors.channelName = "Need to be at least 3 characters";
+              return errors;
+            }
+            const eachWord = channelName.split(" ");
 
             if (eachWord.length > 2) {
-              errors.channelName = 'Too long!';
+              errors.channelName = "Too long!";
               return errors;
             }
             eachWord.forEach((word) => {
               if (word.length > 9) {
-                errors.channelName = 'Too long!';
+                errors.channelName = "Too long!";
               }
             });
 
@@ -58,24 +55,26 @@ class ModalInput extends React.PureComponent {
             resetForm();
             const channelData = { name: channelName };
 
-            if (type !== 'add') {
-              axios.patch(`/api/channels/${id}`, channelData, {
-                headers: {
-                  Authorization: `Bearer ${localStorage.getItem('token')}`,
-                },
-              })
+            if (type !== "add") {
+              axios
+                .patch(`/api/channels/${id}`, channelData, {
+                  headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                  },
+                })
                 .then(() => {
-                  toast.success('Channel has been renamed!');
+                  toast.success("Channel has been renamed!");
                 })
                 .catch(handleServerError);
             } else {
-              axios.post('/api/channels', channelData, {
-                headers: {
-                  Authorization: `Bearer ${localStorage.getItem('token')}`,
-                },
-              })
+              axios
+                .post("/api/channels", channelData, {
+                  headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                  },
+                })
                 .then(() => {
-                  toast.success('Channel has been added!');
+                  toast.success("Channel has been added!");
                 })
                 .catch(handleServerError);
             }
@@ -107,7 +106,12 @@ class ModalInput extends React.PureComponent {
                     onBlur={handleBlur}
                     isInvalid={touched.channelName && !!errors.channelName}
                   />
-                  <Form.Label id="channelName-label" htmlFor="channelName-input">Channel Name</Form.Label>
+                  <Form.Label
+                    id="channelName-label"
+                    htmlFor="channelName-input"
+                  >
+                    Channel Name
+                  </Form.Label>
                   <Form.Control.Feedback type="invalid" tooltip>
                     {errors.channelName}
                   </Form.Control.Feedback>

@@ -1,12 +1,12 @@
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
 
-import React from 'react';
-import axios from 'axios';
-import { Formik } from 'formik';
-import * as Yup from 'yup';
+import React from "react";
+import axios from "axios";
+import { Formik } from "formik";
+import * as Yup from "yup";
 
-import NavbarMenu from './elements/navbar';
+import NavbarMenu from "./elements/navbar";
 
 function Register() {
   return (
@@ -18,33 +18,55 @@ function Register() {
             <div className="card border rounded-5 shadow-sm my-4">
               <div className="row card-body p-5">
                 <div className="col-12 col-md-6 d-flex align-items-center justify-content-center">
-                  <img src="..." className="rounded" alt="Register-Image" height={200} width={200} />
+                  <img
+                    src="..."
+                    className="rounded"
+                    alt="Register-Image"
+                    height={200}
+                    width={200}
+                  />
                 </div>
                 <Formik
-                  initialValues={{ username: '', password: '', password2: '' }}
+                  initialValues={{ username: "", password: "", password2: "" }}
                   validationSchema={Yup.object({
                     username: Yup.string()
-                      .min(3, 'Must be at least 3 characters.')
-                      .max(20, 'Must be 20 characters or less!')
-                      .matches(/^[a-zA-Z0-9-_ ]*$/, 'Please, enter valid characters.'),
+                      .min(3, "Must be at least 3 characters.")
+                      .max(20, "Must be 20 characters or less!")
+                      .matches(
+                        /^[a-zA-Z0-9-_ ]*$/,
+                        "Please, enter valid characters.",
+                      ),
                     password: Yup.string()
-                      .min(6, 'Must be at least 6 characters.')
-                      .max(20, 'Must be 20 characters or less!')
-                      .matches(/^[a-zA-Z0-9!?,._-]*$/, 'Please, enter valid characters.'),
-                    password2: Yup.string()
-                      .oneOf([Yup.ref('password'), null], 'Passwords must match.'),
+                      .min(6, "Must be at least 6 characters.")
+                      .max(20, "Must be 20 characters or less!")
+                      .matches(
+                        /^[a-zA-Z0-9!?,._-]*$/,
+                        "Please, enter valid characters.",
+                      ),
+                    password2: Yup.string().oneOf(
+                      [Yup.ref("password"), null],
+                      "Passwords must match.",
+                    ),
                   })}
                   onSubmit={(values, { setErrors }) => {
-                    axios.post('/api/account/signup', { username: values.username, password: values.password })
+                    axios
+                      .post("/api/account/signup", {
+                        username: values.username,
+                        password: values.password,
+                      })
                       .then((res) => {
-                        localStorage.setItem('token', res.data.token);
-                        document.location.href = '/';
+                        localStorage.setItem("token", res.data.token);
+                        document.location.href = "/";
                       })
                       .catch((err) => {
                         if (err.status === 409) {
-                          document.location.href = '/login';
+                          document.location.href = "/login";
                         } else {
-                          setErrors({ username: true, password: true, password2: 'Sorry, unknown error.' });
+                          setErrors({
+                            username: true,
+                            password: true,
+                            password2: "Sorry, unknown error.",
+                          });
                         }
                       });
                   }}
@@ -58,7 +80,11 @@ function Register() {
                     handleSubmit,
                     isSubmitting,
                   }) => (
-                    <Form noValidate className="col-12 col-md-6 mt-3 mt-md-0" onSubmit={handleSubmit}>
+                    <Form
+                      noValidate
+                      className="col-12 col-md-6 mt-3 mt-md-0"
+                      onSubmit={handleSubmit}
+                    >
                       <h1 className="text-center mb-4">Register</h1>
                       <Form.Group className="form-floating mb-4">
                         <Form.Control
@@ -74,8 +100,15 @@ function Register() {
                           onBlur={handleBlur}
                           isInvalid={touched.username && !!errors.username}
                         />
-                        <Form.Label id="username-label" htmlFor="username-input">Username</Form.Label>
-                        <Form.Control.Feedback type="invalid">{errors.username}</Form.Control.Feedback>
+                        <Form.Label
+                          id="username-label"
+                          htmlFor="username-input"
+                        >
+                          Username
+                        </Form.Label>
+                        <Form.Control.Feedback type="invalid">
+                          {errors.username}
+                        </Form.Control.Feedback>
                       </Form.Group>
                       <Form.Group className="form-floating mb-4">
                         <Form.Control
@@ -89,11 +122,20 @@ function Register() {
                           value={values.password}
                           onChange={handleChange}
                           onBlur={handleBlur}
-                          isInvalid={(touched.password && !!errors.password)
-                            || (touched.password2 && !!errors.password2)}
+                          isInvalid={
+                            (touched.password && !!errors.password) ||
+                            (touched.password2 && !!errors.password2)
+                          }
                         />
-                        <Form.Label id="password-label" htmlFor="password-input">Password</Form.Label>
-                        <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>
+                        <Form.Label
+                          id="password-label"
+                          htmlFor="password-input"
+                        >
+                          Password
+                        </Form.Label>
+                        <Form.Control.Feedback type="invalid">
+                          {errors.password}
+                        </Form.Control.Feedback>
                       </Form.Group>
                       <Form.Group className="form-floating mb-4">
                         <Form.Control
@@ -109,8 +151,15 @@ function Register() {
                           onBlur={handleBlur}
                           isInvalid={touched.password2 && !!errors.password2}
                         />
-                        <Form.Label id="password-label2" htmlFor="password-input2">Confirm Password</Form.Label>
-                        <Form.Control.Feedback type="invalid">{errors.password2}</Form.Control.Feedback>
+                        <Form.Label
+                          id="password-label2"
+                          htmlFor="password-input2"
+                        >
+                          Confirm Password
+                        </Form.Label>
+                        <Form.Control.Feedback type="invalid">
+                          {errors.password2}
+                        </Form.Control.Feedback>
                       </Form.Group>
                       <Button
                         onSubmit={isSubmitting}

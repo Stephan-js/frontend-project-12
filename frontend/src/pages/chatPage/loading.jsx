@@ -1,6 +1,6 @@
-import Spinner from 'react-bootstrap/Spinner';
+import Spinner from "react-bootstrap/Spinner";
 
-import React from 'react';
+import React from "react";
 
 function Loading() {
   return (
@@ -12,7 +12,7 @@ function Loading() {
             disabled
             type="button"
             className="p-0 d-flex border-0 justify-content-center align-items-center ms-2 ms-md-0 text-primary btn"
-            style={{ width: '20px', height: '20px' }}
+            style={{ width: "20px", height: "20px" }}
           >
             +
           </button>
@@ -22,13 +22,9 @@ function Loading() {
         <div className="d-flex flex-column h-100">
           <div className="bg-light mb-4 p-3 shadow-sm small">
             <p className="mb-0">
-              <b>
-                Loading...
-              </b>
+              <b>Loading...</b>
             </p>
-            <span className="text-muted">
-              Meseges: ???
-            </span>
+            <span className="text-muted">Meseges: ???</span>
           </div>
           <div className="h-100">
             <div className="d-flex align-items-center justify-content-center w-100 h-100">

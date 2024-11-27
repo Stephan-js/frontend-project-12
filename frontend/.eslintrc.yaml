@@ -1,7 +1,14 @@
 env:
   browser: true
   es2021: true
-extends: airbnb
+extends: 
+  - airbnb
+  - airbnb/hooks
+  - eslint:recommended
+  - plugin:react/recommended
+  - plugin:react-hooks/recommended
+  - plugin:jsx-a11y/recommended
+  - plugin:prettier/recommended
 overrides:
   - env:
       node: true

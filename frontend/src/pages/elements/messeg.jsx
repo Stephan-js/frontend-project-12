@@ -1,5 +1,5 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import PropTypes from "prop-types";
 
 class Message extends React.PureComponent {
   render() {
@@ -7,7 +7,7 @@ class Message extends React.PureComponent {
     return (
       <div id={id} className="text-break mb-2">
         <b>{username}</b>
-        {': '}
+        {": "}
         {messege}
       </div>
     );

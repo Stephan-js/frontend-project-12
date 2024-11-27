@@ -1,14 +1,14 @@
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
 
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import PropTypes from "prop-types";
 
 class ModalProblem extends React.PureComponent {
   render() {
     const { problem, show, reconnect } = this.props;
 
-    const loginP = problem === 'login';
+    const loginP = problem === "login";
     return (
       <Modal
         className="rounded-3"
@@ -21,16 +21,23 @@ class ModalProblem extends React.PureComponent {
           <Modal.Title>Oops!</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {loginP ? 'It looks like you were signed out of your account. Please sign in again.'
-            : 'It looks like you lost connection with the server. Please try reconnect or come back later!'}
+          {loginP
+            ? "It looks like you were signed out of your account. Please sign in again."
+            : "It looks like you lost connection with the server. Please try reconnect or come back later!"}
         </Modal.Body>
         <Modal.Footer>
           <Button
             className="rounded-3"
-            variant={loginP ? 'dark' : 'danger'}
-            onClick={loginP ? () => { document.location.href = '/login'; } : reconnect}
+            variant={loginP ? "dark" : "danger"}
+            onClick={
+              loginP
+                ? () => {
+                    document.location.href = "/login";
+                  }
+                : reconnect
+            }
           >
-            {loginP ? 'To Login' : 'Reconnect'}
+            {loginP ? "To Login" : "Reconnect"}
           </Button>
         </Modal.Footer>
       </Modal>
