@@ -128,6 +128,7 @@ function ChatPage() {
           ) : <Loading />}
         </div>
       </div>
+      <div />
     </div>
   );
 }
