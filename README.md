@@ -1,6 +1,6 @@
 https://frontend-project-12-dyva.onrender.com
 
-TODO: Make ReadMe file
+TODO: Do ReadMe file
 
 ---
 
