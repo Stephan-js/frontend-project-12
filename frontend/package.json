@@ -4,6 +4,7 @@
   "private": true,
   "proxy": "http://localhost:5001",
   "dependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "axios": "^1.7.7",
     "bootstrap": "^5.3.3",
     "formik": "^2.4.6",
