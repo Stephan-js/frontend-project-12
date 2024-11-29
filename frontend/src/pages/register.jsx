@@ -6,7 +6,7 @@ import axios from "axios";
 import { Formik } from "formik";
 import * as Yup from "yup";
 
-import image from "../img/reg.png";
+import image from "../img/reg.webp";
 
 import NavbarMenu from "./elements/navbar";
 
