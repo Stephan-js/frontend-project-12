@@ -21,7 +21,7 @@ function Login() {
               <div className="row card-body p-5">
                 <div
                   className="col-12 col-md-6 d-flex align-items-center justify-content-center"
-                  style={{ height: "200px" }}
+                  style={{ "min-height": "200px" }}
                 >
                   <img
                     src={image}
