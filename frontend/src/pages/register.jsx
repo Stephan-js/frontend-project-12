@@ -6,6 +6,8 @@ import axios from "axios";
 import { Formik } from "formik";
 import * as Yup from "yup";
 
+import image from "../img/reg.png";
+
 import NavbarMenu from "./elements/navbar";
 
 function Register() {
@@ -17,13 +19,16 @@ function Register() {
           <div className="col-11 col-sm-10 col-md-8 col-xl-7 col-xxl-6">
             <div className="card border rounded-5 shadow-sm my-4">
               <div className="row card-body p-5">
-                <div className="col-12 col-md-6 d-flex align-items-center justify-content-center">
+                <div
+                  className="col-12 col-md-6 d-flex align-items-center justify-content-center"
+                  style={{ height: "200px" }}
+                >
                   <img
-                    src="..."
+                    src={image}
                     className="rounded"
                     alt="Register-Image"
-                    height={200}
-                    width={200}
+                    height={100}
+                    width={100}
                   />
                 </div>
                 <Formik
