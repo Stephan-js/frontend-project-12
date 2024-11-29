@@ -4,8 +4,6 @@ A simple, real-time chat application built using React.js. This application allo
 
 🔗 **Live Demo**: [React Chat App](https://frontend-project-12-dyva.onrender.com)
 
----
-
 ## 🚀 Getting Started
 
 Follow these steps to set up the project locally:
@@ -43,15 +41,11 @@ Make sure you have the following installed:
 
 4. Open [http://localhost:5001](http://localhost:5001) in your browser to view the app.
 
----
-
 ## 🛠️ Tech Stack
 
 - **Frontend**: React.js, SCSS, Bootstrap
 - **Backend**: chat-app-backend (custom backend)
 - **Deployment**: Render
-
----
 
 ## 📄 TODO
 
@@ -59,8 +53,6 @@ Make sure you have the following installed:
 - [ ] Implement group chats.
 - [ ] Enhance UI/UX with animations.
 - [ ] Add emoji support in messages.
-
----
 
 ## 📝 License
 
