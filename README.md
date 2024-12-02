@@ -51,7 +51,6 @@ Make sure you have the following installed:
 
 - [ ] Add settings menu.
 - [ ] Implement group chats.
-- [ ] Enhance UI/UX with animations.
 - [ ] Add emoji support in messages.
 
 ## 📝 License
