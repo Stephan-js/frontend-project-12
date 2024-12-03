@@ -49,7 +49,7 @@ Make sure you have the following installed:
 
 ## 📄 TODO
 
-- [ ] Add settings menu.
+- [ ] Settings menu.
 - [ ] Custom and editable group chats.
 - [ ] Add emoji support in messages.
 
