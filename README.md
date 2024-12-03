@@ -50,7 +50,7 @@ Make sure you have the following installed:
 ## 📄 TODO
 
 - [ ] Add settings menu.
-- [ ] Custom group chats.
+- [ ] Custom and editable group chats.
 - [ ] Add emoji support in messages.
 
 ## 📝 License
