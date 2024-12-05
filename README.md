@@ -51,7 +51,6 @@ Make sure you have the following installed:
 
 - [ ] Settings menu.
 - [ ] Custom and editable group chats.
-- [ ] Add emoji support in messages.
 
 ## 📝 License
 
