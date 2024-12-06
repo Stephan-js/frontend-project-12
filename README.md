@@ -47,11 +47,6 @@ Make sure you have the following installed:
 - **Backend**: chat-app-backend (custom backend)
 - **Deployment**: Render
 
-## 📄 TODO
-
-- [ ] Settings menu.
-- [ ] Custom and editable group chats.
-
 ## 📝 License
 
 This project is licensed under the **MIT License**. Feel free to use and modify it as needed.
