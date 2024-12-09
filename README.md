@@ -17,8 +17,6 @@ Ensure you have the following installed on your system:
 - **Node.js** (v16 or newer recommended)
 - **npm** (comes with Node.js)
 
----
-
 ### Installation
 
 1. **Clone the Repository**
