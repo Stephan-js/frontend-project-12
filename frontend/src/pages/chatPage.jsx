@@ -13,13 +13,7 @@ import Loading from "./chatPage/loading";
 import NavbarMenu from "./elements/navbar";
 
 function ChatPage() {
-  const socket = io({
-    reconnection: false,
-    extraHeaders: {
-      authorization: `Bearer ${localStorage.getItem("token")}`,
-    },
-  });
-
+  const [reconnect, setReconnectF] = useState(null);
   const [activeChannel, setActive] = useState(null);
   const [channels, setChanels] = useState(null);
   const [messages, setMeseges] = useState(null);
@@ -30,30 +24,6 @@ function ChatPage() {
     show: false,
   });
   const [problem, setProblem] = useState(null);
-
-  const reconnect = (e) => {
-    socket.io.open((err) => {
-      e.target.disabled = true;
-      if (!err) {
-        setProblem(null);
-        e.target.disabled = false;
-
-        socket.on("disconnect", () => {
-          setTimeout(() => setProblem("internet"), 1000);
-        });
-        socket.on("connect_error", () => {
-          setTimeout(() => {
-            setProblem("login");
-            localStorage.removeItem("token");
-          }, 500);
-        });
-      } else {
-        setTimeout(() => {
-          e.target.disabled = false;
-        }, 2000);
-      }
-    });
-  };
 
   const handleServerError = (err) => {
     if (err.status === 401) {
@@ -87,6 +57,41 @@ function ChatPage() {
   }, []);
 
   useEffect(() => {
+    const socket = io({
+      reconnection: false,
+      extraHeaders: {
+        authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+
+    const setUpConnectionListeners = () => {
+      socket.on("disconnect", () => {
+        setTimeout(() => setProblem("internet"), 1000);
+      });
+      socket.on("connect_error", () => {
+        setTimeout(() => {
+          setProblem("login");
+          localStorage.removeItem("token");
+        }, 500);
+      });
+    };
+
+    setReconnectF((e) => {
+      socket.io.open((err) => {
+        e.target.disabled = true;
+        if (!err) {
+          setProblem(null);
+          e.target.disabled = false;
+
+          setUpConnectionListeners();
+        } else {
+          setTimeout(() => {
+            e.target.disabled = false;
+          }, 2000);
+        }
+      });
+    });
+
     socket.on("newMessage", (respond) =>
       setMeseges((prevMessages) => [...prevMessages, respond]),
     );
@@ -109,17 +114,8 @@ function ChatPage() {
         return [...newChanels, changed];
       }),
     );
-
-    socket.on("disconnect", () => {
-      setTimeout(() => setProblem("internet"), 1000);
-    });
-    socket.on("connect_error", () => {
-      setTimeout(() => {
-        setProblem("login");
-        localStorage.removeItem("token");
-      }, 500);
-    });
-  }, [socket]);
+    setUpConnectionListeners();
+  }, []);
 
   return (
     <div className="h-100 flex-column d-flex">
