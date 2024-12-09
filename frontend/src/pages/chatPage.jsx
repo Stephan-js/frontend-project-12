@@ -13,7 +13,13 @@ import Loading from "./chatPage/loading";
 import NavbarMenu from "./elements/navbar";
 
 function ChatPage() {
-  const [reconnect, setReconnectF] = useState(null);
+  const socket = io({
+    reconnection: false,
+    extraHeaders: {
+      authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  });
+
   const [activeChannel, setActive] = useState(null);
   const [channels, setChanels] = useState(null);
   const [messages, setMeseges] = useState(null);
@@ -30,6 +36,34 @@ function ChatPage() {
       setProblem("login");
       localStorage.removeItem("token");
     }
+  };
+
+  const setUpErrListeners = () => {
+    socket.on("disconnect", () => {
+      setTimeout(() => setProblem("internet"), 1000);
+    });
+    socket.on("connect_error", () => {
+      setTimeout(() => {
+        setProblem("login");
+        localStorage.removeItem("token");
+      }, 500);
+    });
+  };
+
+  const reconnect = (e) => {
+    socket.io.open((err) => {
+      e.target.disabled = true;
+      if (!err) {
+        setProblem(null);
+        e.target.disabled = false;
+
+        setUpErrListeners();
+      } else {
+        setTimeout(() => {
+          e.target.disabled = false;
+        }, 2000);
+      }
+    });
   };
 
   useEffect(() => {
@@ -57,41 +91,6 @@ function ChatPage() {
   }, []);
 
   useEffect(() => {
-    const socket = io({
-      reconnection: false,
-      extraHeaders: {
-        authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    });
-
-    const setUpConnectionListeners = () => {
-      socket.on("disconnect", () => {
-        setTimeout(() => setProblem("internet"), 1000);
-      });
-      socket.on("connect_error", () => {
-        setTimeout(() => {
-          setProblem("login");
-          localStorage.removeItem("token");
-        }, 500);
-      });
-    };
-
-    setReconnectF((e) => {
-      socket.io.open((err) => {
-        e.target.disabled = true;
-        if (!err) {
-          setProblem(null);
-          e.target.disabled = false;
-
-          setUpConnectionListeners();
-        } else {
-          setTimeout(() => {
-            e.target.disabled = false;
-          }, 2000);
-        }
-      });
-    });
-
     socket.on("newMessage", (respond) =>
       setMeseges((prevMessages) => [...prevMessages, respond]),
     );
@@ -114,7 +113,8 @@ function ChatPage() {
         return [...newChanels, changed];
       }),
     );
-    setUpConnectionListeners();
+
+    setUpErrListeners();
   }, []);
 
   return (
