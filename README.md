@@ -1,6 +1,6 @@
 # React Chat App
 
-Todo: Rewrite src code
+Todo: Rewrite src code && make it more understandable
 
 A real-time chat application built with **React.js**, offering seamless communication through a responsive and interactive interface.
 
