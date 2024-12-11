@@ -1,5 +1,7 @@
 # React Chat App
 
+Todo: Rewrite src code
+
 A real-time chat application built with **React.js**, offering seamless communication through a responsive and interactive interface.
 
 🔗 **Live Demo**: [React Chat App](https://frontend-project-12-dyva.onrender.com)
