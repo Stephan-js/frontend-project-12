@@ -11,18 +11,12 @@ import Message from "../elements/messeg";
 
 class Chat extends React.PureComponent {
   render() {
-    const {
-      setChanMenu,
-      handleServerError,
-      setActive,
-      activeChannel,
-      channels,
-      messages,
-    } = this.props;
-
+    const { setChanMenu, setChanels, handleServerError, channels, messages } =
+      this.props;
     const activeChanMesseges = messages.filter(
-      ({ channelId }) => channelId === activeChannel,
+      ({ channelId }) => channelId === channels.active,
     );
+
     return (
       <div className="d-flex h-100 bg-white flex-column row flex-md-row">
         <div className="col-4 col-md-2 px-md-0 border-bottom border-md-end-0 border-md-right bg-light d-flex flex-row flex-md-column channels">
@@ -40,17 +34,17 @@ class Chat extends React.PureComponent {
             </button>
           </div>
           <div className="flex-nowrap d-flex flex-row flex-md-column px-2 mt-3 mt-md-0 mb-3 nav-pills overflow-auto h-75 w-100 d-block">
-            {channels
-              ? channels.map((info) => (
+            {channels.data
+              ? channels.data.map((info) => (
                   <Channel
                     key={info.id}
                     name={info.name}
                     id={info.id}
                     removable={info.removable}
-                    activeChannel={activeChannel}
+                    channels={channels}
                     handleRename={(d) => setChanMenu(d)}
                     handleErr={(err) => handleServerError(err)}
-                    setActive={(id) => setActive(id)}
+                    setChanels={(data) => setChanels(data)}
                   />
                 ))
               : null}
@@ -61,8 +55,10 @@ class Chat extends React.PureComponent {
             <div className="bg-light mb-4 p-3 shadow-sm small">
               <p className="mb-0">
                 <b>
-                  {channels
-                    ? channels.filter(({ id }) => id === activeChannel)[0].name
+                  {channels.data
+                    ? channels.data.filter(
+                        ({ id }) => id === channels.active,
+                      )[0].name
                     : null}
                 </b>
               </p>
@@ -92,7 +88,7 @@ class Chat extends React.PureComponent {
                   resetForm();
                   const messegeData = {
                     body: messege,
-                    channelId: activeChannel,
+                    channelId: channels.active,
                   };
                   axios
                     .post("/api/messages", messegeData, {
@@ -146,10 +142,9 @@ class Chat extends React.PureComponent {
 }
 
 Chat.propTypes = {
-  setChanMenu: PropTypes.func.isRequired,
-  handleServerError: PropTypes.func.isRequired,
-  setActive: PropTypes.func.isRequired,
-  activeChannel: PropTypes.string.isRequired,
+  setChanels: PropTypes.isRequired,
+  setChanMenu: PropTypes.isRequired,
+  handleServerError: PropTypes.isRequired,
   channels: PropTypes.isRequired,
   messages: PropTypes.isRequired,
 };

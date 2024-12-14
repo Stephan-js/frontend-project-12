@@ -18,10 +18,12 @@ class Channel extends React.PureComponent {
   }
 
   handleClick(e) {
-    const { setActive } = this.props;
+    const { setChanels } = this.props;
     const { id } = e.target;
     if (id) {
-      setActive(id);
+      setChanels(({ data }) => {
+        return { active: id, data };
+      });
       Cookies.set("active-channel", id, { sameSite: "strict", expires: 31 });
     }
   }
@@ -50,9 +52,9 @@ class Channel extends React.PureComponent {
   }
 
   render() {
-    const { name, id, removable, activeChannel } = this.props;
+    const { name, id, removable, channels } = this.props;
 
-    const variant = activeChannel === id ? "secondary" : "none";
+    const variant = channels.active === id ? "secondary" : "none";
     const tooSmall = window.innerWidth < 768;
     if (!removable || tooSmall) {
       return (
@@ -122,13 +124,13 @@ class Channel extends React.PureComponent {
 }
 
 Channel.propTypes = {
-  id: PropTypes.number.isRequired,
-  name: PropTypes.string.isRequired,
-  activeChannel: PropTypes.number.isRequired,
-  handleRename: PropTypes.func.isRequired,
-  setActive: PropTypes.func.isRequired,
-  handleErr: PropTypes.func.isRequired,
-  removable: PropTypes.bool,
+  id: PropTypes.isRequired,
+  name: PropTypes.isRequired,
+  channels: PropTypes.isRequired,
+  handleRename: PropTypes.isRequired,
+  setChanels: PropTypes.isRequired,
+  handleErr: PropTypes.isRequired,
+  removable: PropTypes,
 };
 
 Channel.defaultProps = {

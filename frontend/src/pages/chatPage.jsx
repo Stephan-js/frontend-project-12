@@ -20,7 +20,6 @@ function ChatPage() {
     },
   });
 
-  const [activeChannel, setActive] = useState(null);
   const [channels, setChanels] = useState(null);
   const [messages, setMeseges] = useState(null);
 
@@ -31,6 +30,13 @@ function ChatPage() {
   });
   const [problem, setProblem] = useState(null);
 
+  const reloginPromt = () => {
+    setTimeout(() => {
+      setProblem("login");
+      localStorage.removeItem("token");
+    }, 1000);
+  };
+
   const handleServerError = (err) => {
     if (err.status === 401) {
       setProblem("login");
@@ -38,16 +44,37 @@ function ChatPage() {
     }
   };
 
-  const setUpErrListeners = () => {
-    socket.on("disconnect", () => {
-      setTimeout(() => setProblem("internet"), 1000);
-    });
-    socket.on("connect_error", () => {
-      setTimeout(() => {
-        setProblem("login");
-        localStorage.removeItem("token");
-      }, 500);
-    });
+  const setUpErrEvents = () => {
+    socket.on("disconnect", () => setProblem("internet"));
+    socket.on("connect_error", () => reloginPromt());
+  };
+
+  const setUpSocketEvents = () => {
+    socket.on("newMessage", (respond) =>
+      setMeseges((prevMessages) => [...prevMessages, respond]),
+    );
+    socket.on("newChannel", (newChannel) =>
+      setChanels(({ data, active }) => {
+        const newData = [...data, newChannel];
+        return { active, data: newData };
+      }),
+    );
+    socket.on("removeChannel", (deleted) =>
+      setChanels((chan) => {
+        let active;
+        const data = chan.data.filter(({ id }) => id !== deleted.id);
+        if (deleted.id === chan.active) active = chan.data[0].id;
+        else active = chan.active;
+        return { active, data };
+      }),
+    );
+    socket.on("renameChannel", (changed) =>
+      setChanels(({ data, active }) => {
+        const newChanels = data.filter(({ id }) => id !== changed.id);
+        const newData = [...newChanels, changed];
+        return { active, data: newData };
+      }),
+    );
   };
 
   const reconnect = (e) => {
@@ -57,7 +84,7 @@ function ChatPage() {
         setProblem(null);
         e.target.disabled = false;
 
-        setUpErrListeners();
+        setUpErrEvents();
       } else {
         setTimeout(() => {
           e.target.disabled = false;
@@ -79,42 +106,20 @@ function ChatPage() {
         axios.spread((mess, chan) => {
           setMeseges(mess.data ?? []);
 
-          const dataChan = chan.data;
+          let active;
+          const { data } = chan;
           const activeId = Cookies.get("active-channel");
-          if (dataChan.filter(({ id }) => activeId === id)[0])
-            setActive(activeId);
-          else setActive(dataChan[0].id);
-          setChanels(dataChan);
+          if (data.filter(({ id }) => activeId === id)[0]) active = activeId;
+          else active = data[0].id;
+          setChanels({ active, data });
         }),
       )
       .catch(handleServerError);
   }, []);
 
   useEffect(() => {
-    socket.on("newMessage", (respond) =>
-      setMeseges((prevMessages) => [...prevMessages, respond]),
-    );
-    socket.on("newChannel", (newChannel) =>
-      setChanels((prevChannels) => [...prevChannels, newChannel]),
-    );
-    socket.on("removeChannel", (deleted) =>
-      setChanels((prevChannels) => {
-        const newChanels = prevChannels.filter(({ id }) => id !== deleted.id);
-        setActive((pervActive) => {
-          if (deleted.id === pervActive) return prevChannels[0].id;
-          return pervActive;
-        });
-        return newChanels;
-      }),
-    );
-    socket.on("renameChannel", (changed) =>
-      setChanels((prevChannels) => {
-        const newChanels = prevChannels.filter(({ id }) => id !== changed.id);
-        return [...newChanels, changed];
-      }),
-    );
-
-    setUpErrListeners();
+    setUpSocketEvents();
+    setUpErrEvents();
   }, []);
 
   return (
@@ -139,8 +144,7 @@ function ChatPage() {
             <Chat
               setChanMenu={setChanMenu}
               handleServerError={handleServerError}
-              setActive={setActive}
-              activeChannel={activeChannel}
+              setChanels={setChanels}
               channels={channels}
               messages={messages}
             />
