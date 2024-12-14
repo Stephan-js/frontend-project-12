@@ -23,11 +23,7 @@ function ChatPage() {
   const [channels, setChanels] = useState(null);
   const [messages, setMeseges] = useState(null);
 
-  const [channelMenu, setChanMenu] = useState({
-    type: null,
-    id: null,
-    show: false,
-  });
+  const [channelMenu, setChanMenu] = useState(null);
   const [problem, setProblem] = useState(null);
 
   const reloginPromt = () => {
@@ -129,10 +125,9 @@ function ChatPage() {
       <ModalProblem problem={problem} show={!!problem} reconnect={reconnect} />
       <ModalInput
         handleServerError={handleServerError}
-        hide={() => setChanMenu({ type: null, id: null, show: false })}
-        type={channelMenu.type}
-        id={channelMenu.id}
-        show={channelMenu.show}
+        hide={() => setChanMenu(null)}
+        data={channelMenu ?? { type: null, id: null }}
+        show={!!channelMenu}
       />
       <NavbarMenu />
       <div className="h-100 container-fluid my-4 my-md-5 d-flex">

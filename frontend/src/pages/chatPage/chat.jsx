@@ -23,9 +23,7 @@ class Chat extends React.PureComponent {
           <div className="d-flex mt-md-1 justify-content-between mb-md-2 ps-2 ps-md-4 pe-md-2 p-4">
             <b>Chaneles</b>
             <button
-              onClick={() =>
-                setChanMenu({ type: "add", id: undefined, show: true })
-              }
+              onClick={() => setChanMenu({ type: "add" })}
               type="button"
               className="p-0 d-flex justify-content-center align-items-center ms-2 ms-md-0 text-primary btn"
               style={{ width: "20px", height: "20px" }}

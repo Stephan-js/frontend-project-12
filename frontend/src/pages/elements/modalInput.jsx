@@ -10,7 +10,7 @@ import axios from "axios";
 
 class ModalInput extends React.PureComponent {
   render() {
-    const { handleServerError, hide, show, type, id } = this.props;
+    const { handleServerError, hide, show, data } = this.props;
 
     return (
       <Modal
@@ -22,7 +22,7 @@ class ModalInput extends React.PureComponent {
       >
         <Modal.Header>
           <Modal.Title id="modal-title">
-            {type !== "add" ? "Rename channel" : "Add chanel"}
+            {data.type !== "add" ? "Rename channel" : "Add chanel"}
           </Modal.Title>
         </Modal.Header>
         <Formik
@@ -55,9 +55,9 @@ class ModalInput extends React.PureComponent {
             resetForm();
             const channelData = { name: channelName };
 
-            if (type !== "add") {
+            if (data.type !== "add") {
               axios
-                .patch(`/api/channels/${id}`, channelData, {
+                .patch(`/api/channels/${data.id}`, channelData, {
                   headers: {
                     Authorization: `Bearer ${localStorage.getItem("token")}`,
                   },
@@ -144,11 +144,10 @@ class ModalInput extends React.PureComponent {
 }
 
 ModalInput.propTypes = {
-  type: PropTypes.string.isRequired,
-  show: PropTypes.bool.isRequired,
-  hide: PropTypes.func.isRequired,
-  handleServerError: PropTypes.func.isRequired,
-  id: PropTypes.string.isRequired,
+  data: PropTypes.isRequired,
+  show: PropTypes.isRequired,
+  hide: PropTypes.isRequired,
+  handleServerError: PropTypes.isRequired,
 };
 
 export default ModalInput;
