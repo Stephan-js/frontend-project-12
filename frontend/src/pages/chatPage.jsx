@@ -5,7 +5,7 @@ import io from "socket.io-client";
 import axios from "axios";
 import Cookies from "js-cookie";
 
-import ModalProblem from "./elements/modalProblems";
+import ModalProblem from "./elements/modalProblem";
 import ModalInput from "./elements/modalInput";
 import Chat from "./chatPage/chat";
 import Loading from "./chatPage/loading";
