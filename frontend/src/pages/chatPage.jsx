@@ -19,6 +19,16 @@ function ChatPage() {
   const [channelMenu, setChanMenu] = useState(null);
   const [problem, setProblem] = useState(null);
 
+  const reconnect = useRef();
+  const checkConnectionErr = (err) => {
+    if (err.message === "invalid token") {
+      setTimeout(() => {
+        setProblem("login");
+        localStorage.removeItem("token");
+      }, 1000);
+    }
+  };
+
   const handleServerError = (err) => {
     if (err.status === 401) {
       setProblem("login");
@@ -26,12 +36,38 @@ function ChatPage() {
     }
   };
 
-  const reconnect = useRef();
-
   useEffect(() => {
+    const socket = io({
+      reconnection: false,
+      extraHeaders: {
+        authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+    const setUpErrEvents = () => {
+      socket.on("disconnect", () => setProblem("internet"));
+      socket.on("connect_error", checkConnectionErr);
+    };
+
+    reconnect.current = (e) => {
+      socket.io.open((err) => {
+        e.target.disabled = true;
+        if (!err) {
+          setProblem(null);
+          e.target.disabled = false;
+
+          setUpErrEvents();
+        } else {
+          setTimeout(() => {
+            e.target.disabled = false;
+          }, 2000);
+        }
+      });
+    };
+
     const token = {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     };
+
     axios
       .all([
         axios.get("/api/messages", token),
@@ -50,27 +86,6 @@ function ChatPage() {
         }),
       )
       .catch(handleServerError);
-  }, []);
-
-  useEffect(() => {
-    const socket = io({
-      reconnection: false,
-      extraHeaders: {
-        authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    });
-
-    const setUpErrEvents = () => {
-      socket.on("disconnect", () => setProblem("internet"));
-      socket.on("connect_error", (err) => {
-        if (err.message === "invalid token") {
-          setTimeout(() => {
-            setProblem("login");
-            localStorage.removeItem("token");
-          }, 1000);
-        }
-      });
-    };
 
     socket.on("newMessage", (respond) =>
       setMeseges((prevMessages) => [...prevMessages, respond]),
@@ -99,22 +114,6 @@ function ChatPage() {
     );
 
     setUpErrEvents();
-
-    reconnect.current = (e) => {
-      socket.io.open((err) => {
-        e.target.disabled = true;
-        if (!err) {
-          setProblem(null);
-          e.target.disabled = false;
-
-          setUpErrEvents();
-        } else {
-          setTimeout(() => {
-            e.target.disabled = false;
-          }, 2000);
-        }
-      });
-    };
   }, []);
 
   return (
