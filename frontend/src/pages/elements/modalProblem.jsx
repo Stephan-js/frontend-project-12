@@ -46,9 +46,9 @@ class ModalProblem extends React.PureComponent {
 }
 
 ModalProblem.propTypes = {
-  problem: PropTypes.string.isRequired,
-  show: PropTypes.bool.isRequired,
-  reconnect: PropTypes.func.isRequired,
+  problem: PropTypes.isRequired,
+  show: PropTypes.isRequired,
+  reconnect: PropTypes.isRequired,
 };
 
 export default ModalProblem;
