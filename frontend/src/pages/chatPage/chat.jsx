@@ -1,6 +1,7 @@
 import Form from "react-bootstrap/Form";
 
 import React from "react";
+import { toast } from "react-toastify";
 import PropTypes from "prop-types";
 import { Formik } from "formik";
 import * as Yup from "yup";
@@ -23,7 +24,11 @@ class Chat extends React.PureComponent {
           <div className="d-flex mt-md-1 justify-content-between mb-md-2 ps-2 ps-md-4 pe-md-2 p-4">
             <b>Chaneles</b>
             <button
-              onClick={() => setChanMenu({ type: "add" })}
+              onClick={() => {
+                if (channels.data.length >= 20) {
+                  toast.error("Oops! You can only have up to 20 channels.");
+                } else setChanMenu({ type: "add" });
+              }}
               type="button"
               className="p-0 d-flex justify-content-center align-items-center ms-2 ms-md-0 text-primary btn"
               style={{ width: "20px", height: "20px" }}
