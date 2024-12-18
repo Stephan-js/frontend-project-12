@@ -16,8 +16,8 @@ function ChatPage() {
   const [channels, setChanels] = useState(null);
   const [messages, setMeseges] = useState(null);
 
-  const [channelMenu, setChanMenu] = useState(null);
-  const [problem, setProblem] = useState(null);
+  const [channelMenu, setChanMenu] = useState(null); // rename || add
+  const [problem, setProblem] = useState(null); // login || internet
 
   const reconnect = useRef();
   const checkConnectionErr = (err) => {
@@ -27,6 +27,10 @@ function ChatPage() {
         localStorage.removeItem("token");
       }, 1000);
     }
+  };
+
+  const checkDisconnectErr = () => {
+    setTimeout(() => setProblem("internet"), 2000);
   };
 
   const handleServerError = (err) => {
@@ -43,10 +47,6 @@ function ChatPage() {
         authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     });
-    const setUpErrEvents = () => {
-      socket.on("disconnect", () => setProblem("internet"));
-      socket.on("connect_error", checkConnectionErr);
-    };
 
     reconnect.current = (e) => {
       socket.io.open((err) => {
@@ -55,7 +55,8 @@ function ChatPage() {
           setProblem(null);
           e.target.disabled = false;
 
-          setUpErrEvents();
+          socket.on("disconnect", checkDisconnectErr);
+          socket.on("connect_error", checkConnectionErr);
         } else {
           setTimeout(() => {
             e.target.disabled = false;
@@ -113,7 +114,8 @@ function ChatPage() {
       }),
     );
 
-    setUpErrEvents();
+    socket.on("disconnect", checkDisconnectErr);
+    socket.on("connect_error", checkConnectionErr);
   }, []);
 
   return (

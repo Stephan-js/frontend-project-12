@@ -6,8 +6,8 @@ import {
   Navigate,
 } from "react-router-dom";
 
-import "./scss/style.scss";
 import "react-toastify/dist/ReactToastify.css";
+import "./scss/style.scss";
 
 import Login from "./pages/login";
 import Page404 from "./pages/page404";

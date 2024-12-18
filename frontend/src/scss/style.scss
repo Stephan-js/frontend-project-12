@@ -1,4 +1,9 @@
 @import '~bootstrap/scss/bootstrap';
+
+:root {
+  --toastify-color-progress-light: #000;
+}
+
 /* Custom chat size */
 .chat {
   max-height: 600px;
