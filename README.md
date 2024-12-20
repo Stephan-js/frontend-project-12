@@ -1,6 +1,6 @@
 # React Chat App
 
-todo: update backend
+todo: update backend with database
 
 A real-time chat application built with **React.js**, offering seamless communication through a responsive and interactive interface.
 
