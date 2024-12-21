@@ -12,6 +12,43 @@ import Loading from "./chatPage/loading";
 
 import NavbarMenu from "./elements/navbar";
 
+const setSocketEvents = (setChanels, setMeseges, setProblem) => {
+  return {
+    newMessage: (respond) =>
+      setMeseges((prevMessages) => [...prevMessages, respond]),
+    newChannel: (newChannel) =>
+      setChanels(({ data, active }) => {
+        const newData = [...data, newChannel];
+        return { active, data: newData };
+      }),
+    removeChannel: (deleted) =>
+      setChanels((chan) => {
+        let active;
+        const data = chan.data.filter(({ id }) => id !== deleted.id);
+        if (deleted.id === chan.active) active = chan.data[0].id;
+        else active = chan.active;
+        return { active, data };
+      }),
+    renameChannel: (changed) =>
+      setChanels(({ data, active }) => {
+        const newChanels = data.filter(({ id }) => id !== changed.id);
+        const newData = [...newChanels, changed];
+        return { active, data: newData };
+      }),
+    disconnect: () => {
+      setTimeout(() => setProblem("internet"), 2000);
+    },
+    connect_error: (err) => {
+      if (err.message === "invalid token") {
+        setTimeout(() => {
+          setProblem("login");
+          localStorage.removeItem("token");
+        }, 1000);
+      }
+    },
+  };
+};
+
 function ChatPage() {
   const [channels, setChanels] = useState(null);
   const [messages, setMeseges] = useState(null);
@@ -20,18 +57,6 @@ function ChatPage() {
   const [problem, setProblem] = useState(null); // login || internet
 
   const reconnect = useRef();
-  const checkConnectionErr = (err) => {
-    if (err.message === "invalid token") {
-      setTimeout(() => {
-        setProblem("login");
-        localStorage.removeItem("token");
-      }, 1000);
-    }
-  };
-
-  const checkDisconnectErr = () => {
-    setTimeout(() => setProblem("internet"), 2000);
-  };
 
   const handleServerError = (err) => {
     if (err.status === 401) {
@@ -48,26 +73,11 @@ function ChatPage() {
       },
     });
 
-    reconnect.current = (e) => {
-      socket.io.open((err) => {
-        e.target.disabled = true;
-        if (!err) {
-          setProblem(null);
-          e.target.disabled = false;
-
-          socket.on("disconnect", checkDisconnectErr);
-          socket.on("connect_error", checkConnectionErr);
-        } else {
-          setTimeout(() => {
-            e.target.disabled = false;
-          }, 2000);
-        }
-      });
-    };
-
     const token = {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     };
+
+    const socketEvents = setSocketEvents(setChanels, setMeseges, setProblem);
 
     axios
       .all([
@@ -88,34 +98,29 @@ function ChatPage() {
       )
       .catch(handleServerError);
 
-    socket.on("newMessage", (respond) =>
-      setMeseges((prevMessages) => [...prevMessages, respond]),
-    );
-    socket.on("newChannel", (newChannel) =>
-      setChanels(({ data, active }) => {
-        const newData = [...data, newChannel];
-        return { active, data: newData };
-      }),
-    );
-    socket.on("removeChannel", (deleted) =>
-      setChanels((chan) => {
-        let active;
-        const data = chan.data.filter(({ id }) => id !== deleted.id);
-        if (deleted.id === chan.active) active = chan.data[0].id;
-        else active = chan.active;
-        return { active, data };
-      }),
-    );
-    socket.on("renameChannel", (changed) =>
-      setChanels(({ data, active }) => {
-        const newChanels = data.filter(({ id }) => id !== changed.id);
-        const newData = [...newChanels, changed];
-        return { active, data: newData };
-      }),
-    );
+    socket.onAny((eventName, changes) => {
+      socketEvents[eventName](changes);
+    });
 
-    socket.on("disconnect", checkDisconnectErr);
-    socket.on("connect_error", checkConnectionErr);
+    socket.on("disconnect", socketEvents.disconnect);
+    socket.on("connect_error", socketEvents.connect_error);
+
+    reconnect.current = (e) => {
+      socket.io.open((err) => {
+        e.target.disabled = true;
+        if (!err) {
+          setProblem(null);
+          e.target.disabled = false;
+
+          socket.on("disconnect", socketEvents.disconnect);
+          socket.on("connect_error", socketEvents.connect_error);
+        } else {
+          setTimeout(() => {
+            e.target.disabled = false;
+          }, 2000);
+        }
+      });
+    };
   }, []);
 
   return (
